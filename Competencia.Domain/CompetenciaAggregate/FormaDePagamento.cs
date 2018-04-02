@@ -1,4 +1,4 @@
-﻿namespace Lancamentos.Domain.CompetenciaAggregate
+﻿namespace Competencia.Domain.CompetenciaAggregate
 {
 	public enum FormaDePagamento
 	{

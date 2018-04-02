@@ -1,9 +1,9 @@
-﻿using FluentAssertions;
-using Lancamentos.Domain.CompetenciaAggregate;
+﻿using Competencia.Domain.CompetenciaAggregate;
+using FluentAssertions;
 using System;
 using Xunit;
 
-namespace Lancamentos.Domain.Test
+namespace Competencia.Domain.Test
 {
 	public class LancamentoTest
 	{

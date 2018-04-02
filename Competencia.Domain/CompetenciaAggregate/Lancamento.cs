@@ -1,7 +1,7 @@
 ﻿using SharedKernel.Common;
 using System;
 
-namespace Lancamentos.Domain.CompetenciaAggregate
+namespace Competencia.Domain.CompetenciaAggregate
 {
 	public sealed class Lancamento : Entity<Guid>
 	{
