@@ -14,7 +14,7 @@ namespace Lancamentos.Domain.CompetenciaAggregate
 		public FormaDePagamento FormaDePagto { get; private set; }
 		public string Anotacao { get; private set; }
 
-		private Lancamento(Guid id) : base(id)
+		private Lancamento(Guid id)
 		{
 
 		}

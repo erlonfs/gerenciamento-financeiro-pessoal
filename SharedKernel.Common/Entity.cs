@@ -16,6 +16,11 @@ namespace SharedKernel.Common
 			_id = id;
 		}
 
+		protected Entity()
+		{
+
+		}
+
 		public TId Id
 		{
 			get { return _id; }

@@ -7,16 +7,17 @@ namespace Lancamentos.Domain.CompetenciaAggregate
 {
 	public class Competencia : Entity<Guid>
 	{
-		public int Ano { get; private set; }
+		public Ano Ano { get; private set; }
 		public Mes Mes { get; private set; }
 
 		private List<Lancamento> _lancamentos = new List<Lancamento>();
 		public IReadOnlyList<Lancamento> Lancamentos => _lancamentos.AsReadOnly();
 
-		public Competencia(Guid id, int ano, Mes mes, List<Lancamento> lancamentos) : base(id)
+		public Competencia(Guid id, Ano ano, Mes mes, List<Lancamento> lancamentos) : base(id)
 		{
 			Ano = ano;
 			Mes = mes;
+
 			_lancamentos = lancamentos;
 		}
 

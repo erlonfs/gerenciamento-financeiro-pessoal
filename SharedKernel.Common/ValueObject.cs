@@ -1,47 +1,97 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace SharedKernel.Common
 {
-	public abstract class ValueObject<T> where T : ValueObject<T>
+	public abstract class ValueObject<T> : IEquatable<T>
+	  where T : ValueObject<T>
 	{
-		protected abstract IEnumerable<object> GetEqualityComponents();
-
 		public override bool Equals(object obj)
 		{
-			var valueObject = obj as T;
-
-			if (ReferenceEquals(valueObject, null))
+			if (obj == null)
 				return false;
 
-			return EqualsCore(valueObject);
-		}
+			T other = obj as T;
 
-		private bool EqualsCore(ValueObject<T> other)
-		{
-			return GetEqualityComponents().SequenceEqual(other.GetEqualityComponents());
+			return Equals(other);
 		}
 
 		public override int GetHashCode()
 		{
-			return GetEqualityComponents()
-				.Aggregate(1, (current, obj) => current * 23 + (obj?.GetHashCode() ?? 0));
+			IEnumerable<FieldInfo> fields = GetFields();
+
+			int startValue = 17;
+			int multiplier = 59;
+
+			int hashCode = startValue;
+
+			foreach (FieldInfo field in fields)
+			{
+				object value = field.GetValue(this);
+
+				if (value != null)
+					hashCode = hashCode * multiplier + value.GetHashCode();
+			}
+
+			return hashCode;
 		}
 
-		public static bool operator ==(ValueObject<T> a, ValueObject<T> b)
+		public virtual bool Equals(T other)
 		{
-			if (ReferenceEquals(a, null) && ReferenceEquals(b, null))
-				return true;
-
-			if (ReferenceEquals(a, null) || ReferenceEquals(b, null))
+			if (other == null)
 				return false;
 
-			return a.Equals(b);
+			Type t = GetType();
+			Type otherType = other.GetType();
+
+			if (t != otherType)
+				return false;
+
+			FieldInfo[] fields = t.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+
+			foreach (FieldInfo field in fields)
+			{
+				object value1 = field.GetValue(other);
+				object value2 = field.GetValue(this);
+
+				if (value1 == null)
+				{
+					if (value2 != null)
+						return false;
+				}
+				else if (!value1.Equals(value2))
+					return false;
+			}
+
+			return true;
 		}
 
-		public static bool operator !=(ValueObject<T> a, ValueObject<T> b)
+		private IEnumerable<FieldInfo> GetFields()
 		{
-			return !(a == b);
+			Type t = GetType();
+
+			List<FieldInfo> fields = new List<FieldInfo>();
+
+			while (t != typeof(object))
+			{
+				fields.AddRange(t.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public));
+
+				t = t.BaseType;
+			}
+
+			return fields;
+		}
+
+		public static bool operator ==(ValueObject<T> x, ValueObject<T> y)
+		{
+			return x.Equals(y);
+		}
+
+		public static bool operator !=(ValueObject<T> x, ValueObject<T> y)
+		{
+			return !(x == y);
 		}
 	}
 }

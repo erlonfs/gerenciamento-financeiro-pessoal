@@ -17,6 +17,22 @@ namespace Lancamentos.Domain.Test
 		private readonly string _anotacao = "Carne para o churrasco";
 
 		[Fact]
+		public void Quando_criar_lancamento_deve_constar_todos_os_dados_informados()
+		{
+			var lancamento = Lancamento.Create(_tipo, _categoriaId, _data, _descricao, _isLancamentoPago, _valor,
+										   _formaDePagto, _anotacao);
+
+			lancamento.Tipo.Should().Be(_tipo);
+			lancamento.CategoriaId.Should().Be(_categoriaId);
+			lancamento.Data.Should().Be(_data);
+			lancamento.Descricao.Should().Be(_descricao);
+			lancamento.IsLancamentoPago.Should().Be(_isLancamentoPago);
+			lancamento.Valor.Should().Be(_valor);
+			lancamento.FormaDePagto.Should().Be(_formaDePagto);
+			lancamento.Anotacao.Should().Be(_anotacao);
+		}
+
+		[Fact]
 		public void Nao_pode_criar_lancamento_com_tipo_de_lancamento_invalido()
 		{
 			Action act = () => Lancamento.Create(default(LancamentoTipo), _categoriaId, _data, _descricao, _isLancamentoPago, _valor,
