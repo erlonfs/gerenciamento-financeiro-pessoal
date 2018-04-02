@@ -8,7 +8,7 @@ namespace SharedKernel.Common
 		private readonly List<IDomainEvent> _domainEvents = new List<IDomainEvent>();
 		public virtual IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents;
 
-		private AggregateRoot() : base(new Guid())
+		protected AggregateRoot() : base(new Guid())
 		{
 
 		}
