@@ -29,19 +29,25 @@ namespace Competencia.Domain.Test
 			competencia.Lancamentos.Count.Should().Be(_lancamentos.Count);
 		}
 
-		[Fact]
-		public void Quando_adicionar_lancamentos_deve_constar_saldos_e_totais_corretamente()
+		[Theory]
+		[InlineData(15, 10, -5, 15, 10)]
+		[InlineData(5, 5, 0, 5, 5)]
+		[InlineData(1, 0, -1, 1, 0)]
+		[InlineData(0, 0, 0, 0, 0)]
+		[InlineData(99, 99, 0, 99, 99)]
+		[InlineData(99, 0, -99, 99, 0)]
+		public void Quando_adicionar_lancamentos_deve_constar_saldos_e_totais_corretamente(decimal despesa, decimal receita, decimal saldo, decimal totalContasAPagar, decimal totalContasAReceber)
 		{
 			var lancamentos = new List<Lancamento>();
 
-			lancamentos.Add(LancamentoStub.CreateDespesaComValor(15M));
-			lancamentos.Add(LancamentoStub.CreateReceitaComValor(10M));
+			lancamentos.Add(LancamentoStub.CreateDespesaComValor(despesa));
+			lancamentos.Add(LancamentoStub.CreateReceitaComValor(receita));
 
 			var competencia = new CompetenciaAggregate.Competencia(_competenciaId, _ano, _mes, lancamentos);
 
-			competencia.Saldo.Should().Be(-5M);
-			competencia.TotalContasAPagar.Should().Be(15M);
-			competencia.TotalContasAReceber.Should().Be(10M);
+			competencia.Saldo.Should().Be(saldo);
+			competencia.TotalContasAPagar.Should().Be(totalContasAPagar);
+			competencia.TotalContasAReceber.Should().Be(totalContasAReceber);
 		}
 	}
 }
