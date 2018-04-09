@@ -46,7 +46,7 @@ namespace Competencia.Domain.CompetenciaAggregate
 
 		public void RemoverLancamento(Lancamento lancamento)
 		{
-			var lancamentoRemover = _lancamentos.SingleOrDefault(x => x == lancamento);
+			var lancamentoRemover = _lancamentos.SingleOrDefault(x => x.Id == lancamento.Id);
 
 			_lancamentos.Remove(lancamentoRemover);
 
