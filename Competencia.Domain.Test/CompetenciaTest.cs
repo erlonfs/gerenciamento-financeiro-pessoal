@@ -1,7 +1,7 @@
 ﻿using Xunit;
 using Competencia.Domain.CompetenciaAggregate;
 using System;
-using SharedKernel.Common;
+using SharedKernel.Common.ValueObjects;
 using FluentAssertions;
 using System.Collections.Generic;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SharedKernel.Common
+namespace SharedKernel.Common.ValueObjects
 {
 	public class Ano : ValueObject<Ano>
 	{

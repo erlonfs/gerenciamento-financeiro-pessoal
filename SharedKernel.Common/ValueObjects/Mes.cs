@@ -1,4 +1,4 @@
-﻿namespace SharedKernel.Common
+﻿namespace SharedKernel.Common.ValueObjects
 {
 	public enum Mes
     {

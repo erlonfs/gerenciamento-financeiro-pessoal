@@ -1,4 +1,5 @@
 ﻿using SharedKernel.Common;
+using SharedKernel.Common.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,6 +79,8 @@ namespace Competencia.Domain.CompetenciaAggregate
 			{
 				DomainEvents.Raise(new LancamentoAdicionado(item));
 			}
+
+			DomainEvents.Raise(new CompetenciaCriada(this));
 
 		}
 
