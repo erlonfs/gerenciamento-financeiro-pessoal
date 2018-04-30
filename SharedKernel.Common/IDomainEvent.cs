@@ -1,6 +1,9 @@
-﻿namespace SharedKernel.Common
+﻿using System;
+
+namespace SharedKernel.Common
 {
-    public interface IDomainEvent
-    {
-    }
+	public interface IDomainEvent
+	{
+		DateTime DataCriacao { get; }
+	}
 }

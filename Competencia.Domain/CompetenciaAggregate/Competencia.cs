@@ -19,19 +19,26 @@ namespace Competencia.Domain.CompetenciaAggregate
 
 		public Competencia(Guid id, Ano ano, Mes mes, List<Lancamento> lancamentos) : base(id)
 		{
+			DomainEvents.Register<LancamentoAdicionado>(x => { AtualizarSaldos(); });
+			DomainEvents.Register<LancamentoAlterado>(x => { AtualizarSaldos(); });
+			DomainEvents.Register<LancamentoRemovido>(x => { AtualizarSaldos(); });
+
 			Ano = ano;
 			Mes = mes;
 
-			_lancamentos = lancamentos;
-			AtualizarSaldos();
+			foreach (var item in lancamentos)
+			{
+				_lancamentos.Add(item);
+				DomainEvents.Raise(new LancamentoAdicionado(item));
+			}
+
 		}
 
 		public void AdicionarLancamento(Lancamento lancamento)
 		{
 			_lancamentos.Add(lancamento);
 
-			AtualizarSaldos();
-			//Raise Domain Event
+			DomainEvents.Raise(new LancamentoAdicionado(lancamento));
 		}
 
 		public void AlterarLancamento(Lancamento lancamento)
@@ -40,8 +47,7 @@ namespace Competencia.Domain.CompetenciaAggregate
 
 			lancamentoAlterar = lancamento;
 
-			AtualizarSaldos();
-			//Raise Domain Event
+			DomainEvents.Raise(new LancamentoAlterado(lancamento));
 		}
 
 		public void RemoverLancamento(Lancamento lancamento)
@@ -50,12 +56,16 @@ namespace Competencia.Domain.CompetenciaAggregate
 
 			_lancamentos.Remove(lancamentoRemover);
 
-			AtualizarSaldos();
-			//Raise Domain Event
+			DomainEvents.Raise(new LancamentoRemovido(lancamento));
+
 		}
 
 		private void AtualizarSaldos()
 		{
+			TotalContasAReceber = 0;
+			TotalContasAPagar = 0;
+			Saldo = 0;
+
 			_lancamentos.ForEach(lancamento =>
 			{
 				if (lancamento.Tipo == LancamentoTipo.Receita)

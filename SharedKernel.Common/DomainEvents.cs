@@ -1,37 +1,50 @@
-﻿using System;
+﻿using StructureMap;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 namespace SharedKernel.Common
 {
-    public static class DomainEvents
-    {
-        private static List<Type> _handlers;
+	public static class DomainEvents
+	{
+		[ThreadStatic]
+		private static List<Delegate> actions;
+		static DomainEvents()
+		{
+			Container = new Container();
+		}
+		public static IContainer Container { get; set; }
 
-        public static void Init()
-        {
-            _handlers = Assembly.GetExecutingAssembly()
-                .GetTypes()
-                .Where(x => x.GetInterfaces().Any(y => y.IsGenericType && y.GetGenericTypeDefinition() == typeof(IHandler<>)))
-                .ToList();
-        }
+		public static void Register<T>(Action<T> callback) where T : IDomainEvent
+		{
+			if (actions == null)
+			{
+				actions = new List<Delegate>();
+			}
+			actions.Add(callback);
+		}
 
-        public static void Dispatch(IDomainEvent domainEvent)
-        {
-            foreach (Type handlerType in _handlers)
-            {
-                bool canHandleEvent = handlerType.GetInterfaces()
-                    .Any(x => x.IsGenericType
-                        && x.GetGenericTypeDefinition() == typeof(IHandler<>)
-                        && x.GenericTypeArguments[0] == domainEvent.GetType());
+		public static void ClearCallbacks()
+		{
+			actions = null;
+		}
 
-                if (canHandleEvent)
-                {
-                    dynamic handler = Activator.CreateInstance(handlerType);
-                    handler.Handle((dynamic)domainEvent);
-                }
-            }
-        }
-    }
+		public static void Raise<T>(T args) where T : IDomainEvent
+		{
+			foreach (var handler in Container.GetAllInstances<IHandler<T>>())
+			{
+				handler.Handle(args);
+			}
+
+			if (actions != null)
+			{
+				foreach (var action in actions)
+				{
+					if (action is Action<T>)
+					{
+						((Action<T>)action)(args);
+					}
+				}
+			}
+		}
+	}
 }
