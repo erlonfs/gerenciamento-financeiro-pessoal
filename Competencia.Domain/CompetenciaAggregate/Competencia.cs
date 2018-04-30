@@ -17,47 +17,33 @@ namespace Competencia.Domain.CompetenciaAggregate
 		private List<Lancamento> _lancamentos = new List<Lancamento>();
 		public IReadOnlyList<Lancamento> Lancamentos => _lancamentos.AsReadOnly();
 
-		public Competencia(Guid id, Ano ano, Mes mes, List<Lancamento> lancamentos) : base(id)
+		private void Register()
 		{
-			DomainEvents.Register<LancamentoAdicionado>(x => { AtualizarSaldos(); });
-			DomainEvents.Register<LancamentoAlterado>(x => { AtualizarSaldos(); });
-			DomainEvents.Register<LancamentoRemovido>(x => { AtualizarSaldos(); });
-
-			Ano = ano;
-			Mes = mes;
-
-			foreach (var item in lancamentos)
+			DomainEvents.Register<LancamentoAdicionado>(e =>
 			{
-				_lancamentos.Add(item);
-				DomainEvents.Raise(new LancamentoAdicionado(item));
-			}
+				_lancamentos.Add(e.Lancamento);
 
-		}
+				AtualizarSaldos();
 
-		public void AdicionarLancamento(Lancamento lancamento)
-		{
-			_lancamentos.Add(lancamento);
+			});
 
-			DomainEvents.Raise(new LancamentoAdicionado(lancamento));
-		}
+			DomainEvents.Register<LancamentoAlterado>(e =>
+			{
+				var lancamentoAlterar = _lancamentos.SingleOrDefault(x => x.Id == e.Lancamento.Id);
+				lancamentoAlterar = e.Lancamento;
 
-		public void AlterarLancamento(Lancamento lancamento)
-		{
-			var lancamentoAlterar = _lancamentos.SingleOrDefault(x => x.Id == lancamento.Id);
+				AtualizarSaldos();
 
-			lancamentoAlterar = lancamento;
+			});
 
-			DomainEvents.Raise(new LancamentoAlterado(lancamento));
-		}
+			DomainEvents.Register<LancamentoRemovido>(e =>
+			{
+				var lancamentoRemover = _lancamentos.SingleOrDefault(x => x.Id == e.Lancamento.Id);
+				_lancamentos.Remove(lancamentoRemover);
 
-		public void RemoverLancamento(Lancamento lancamento)
-		{
-			var lancamentoRemover = _lancamentos.SingleOrDefault(x => x.Id == lancamento.Id);
+				AtualizarSaldos();
 
-			_lancamentos.Remove(lancamentoRemover);
-
-			DomainEvents.Raise(new LancamentoRemovido(lancamento));
-
+			});
 		}
 
 		private void AtualizarSaldos()
@@ -80,5 +66,35 @@ namespace Competencia.Domain.CompetenciaAggregate
 				}
 			});
 		}
+
+		public Competencia(Guid id, Ano ano, Mes mes, List<Lancamento> lancamentos) : base(id)
+		{
+			Register();
+
+			Ano = ano;
+			Mes = mes;
+
+			foreach (var item in lancamentos)
+			{
+				DomainEvents.Raise(new LancamentoAdicionado(item));
+			}
+
+		}
+
+		public void AdicionarLancamento(Lancamento lancamento)
+		{
+			DomainEvents.Raise(new LancamentoAdicionado(lancamento));
+		}
+
+		public void AlterarLancamento(Lancamento lancamento)
+		{
+			DomainEvents.Raise(new LancamentoAlterado(lancamento));
+		}
+
+		public void RemoverLancamento(Lancamento lancamento)
+		{
+			DomainEvents.Raise(new LancamentoRemovido(lancamento));
+		}
+
 	}
 }
