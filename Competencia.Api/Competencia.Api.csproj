@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <ApplicationIcon />
+    <Win32Resource />
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,6 +12,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="2.4.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="2.4.0" />
   </ItemGroup>
 
   <ItemGroup>
