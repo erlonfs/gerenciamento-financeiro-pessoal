@@ -21,12 +21,11 @@ namespace Competencia.Domain.Test
 		[Fact]
 		public void Quando_criar_uma_competencia_deve_contar_dados_informados()
 		{
-			var competencia = new CompetenciaAggregate.Competencia(_competenciaId, _ano, _mes, _lancamentos);
+			var competencia = new CompetenciaAggregateRoot(_competenciaId, _ano, _mes);
 
 			competencia.Id.Should().Be(_competenciaId);
 			competencia.Ano.Should().Be(_ano);
 			competencia.Mes.Should().Be(_mes);
-			competencia.Lancamentos.Count.Should().Be(_lancamentos.Count);
 		}
 
 		[Theory]
@@ -38,16 +37,30 @@ namespace Competencia.Domain.Test
 		[InlineData(99, 0, -99, 99, 0)]
 		public void Quando_adicionar_lancamentos_deve_constar_saldos_e_totais_corretamente(decimal despesa, decimal receita, decimal saldo, decimal totalContasAPagar, decimal totalContasAReceber)
 		{
-			var lancamentos = new List<Lancamento>();
+			var competencia = new CompetenciaAggregateRoot(_competenciaId, _ano, _mes);
 
-			lancamentos.Add(LancamentoStub.CreateDespesaComValor(despesa));
-			lancamentos.Add(LancamentoStub.CreateReceitaComValor(receita));
-
-			var competencia = new CompetenciaAggregate.Competencia(_competenciaId, _ano, _mes, lancamentos);
+			competencia.AdicionarLancamento(LancamentoStub.CreateDespesaComValor(despesa));
+			competencia.AdicionarLancamento(LancamentoStub.CreateReceitaComValor(receita));
 
 			competencia.Saldo.Should().Be(saldo);
 			competencia.TotalContasAPagar.Should().Be(totalContasAPagar);
 			competencia.TotalContasAReceber.Should().Be(totalContasAReceber);
+		}
+
+		[Fact]
+		public void Quando_remover_lancamento_deve_constar_saldos_e_totais_corretamente()
+		{
+			var competencia = new CompetenciaAggregateRoot(_competenciaId, _ano, _mes);
+
+			var lancamentoARemover = LancamentoStub.CreateDespesaComValor(50);
+
+			competencia.AdicionarLancamento(lancamentoARemover);
+			competencia.AdicionarLancamento(LancamentoStub.CreateReceitaComValor(10));
+			competencia.RemoverLancamento(lancamentoARemover);
+
+			competencia.Saldo.Should().Be(10);
+			competencia.TotalContasAPagar.Should().Be(0);
+			competencia.TotalContasAReceber.Should().Be(10);
 		}
 	}
 }

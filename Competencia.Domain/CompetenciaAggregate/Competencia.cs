@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Competencia.Domain.CompetenciaAggregate
 {
-	public class Competencia : Entity<Guid>
+	public class CompetenciaAggregateRoot : Entity<Guid>
 	{
 		public Ano Ano { get; private set; }
 		public Mes Mes { get; private set; }
@@ -24,61 +24,73 @@ namespace Competencia.Domain.CompetenciaAggregate
 			{
 				_lancamentos.Add(e.Lancamento);
 
-				AtualizarSaldos();
+				if (e.Lancamento.Tipo == LancamentoTipo.Receita)
+				{
+					TotalContasAReceber += e.Lancamento.Valor;
+					Saldo += e.Lancamento.Valor;
+				}
+
+				if (e.Lancamento.Tipo == LancamentoTipo.Despesa)
+				{
+					TotalContasAPagar += e.Lancamento.Valor;
+					Saldo -= e.Lancamento.Valor;
+				}
 
 			});
 
 			DomainEvents.Register<LancamentoAlterado>(e =>
 			{
 				var lancamentoAlterar = _lancamentos.SingleOrDefault(x => x.Id == e.Lancamento.Id);
-				lancamentoAlterar = e.Lancamento;
 
-				AtualizarSaldos();
+				if (e.Lancamento.Tipo == LancamentoTipo.Receita)
+				{
+					TotalContasAReceber -= lancamentoAlterar.Valor;
+					TotalContasAReceber += e.Lancamento.Valor;
+
+					Saldo -= lancamentoAlterar.Valor;
+					Saldo += e.Lancamento.Valor;
+				}
+
+				if (e.Lancamento.Tipo == LancamentoTipo.Despesa)
+				{
+					TotalContasAPagar -= lancamentoAlterar.Valor;
+					TotalContasAPagar += e.Lancamento.Valor;
+
+					Saldo += lancamentoAlterar.Valor;
+					Saldo -= e.Lancamento.Valor;
+				}
+
+				lancamentoAlterar = e.Lancamento;
 
 			});
 
 			DomainEvents.Register<LancamentoRemovido>(e =>
 			{
 				var lancamentoRemover = _lancamentos.SingleOrDefault(x => x.Id == e.Lancamento.Id);
+
+				if (e.Lancamento.Tipo == LancamentoTipo.Receita)
+				{
+					TotalContasAReceber -= lancamentoRemover.Valor;
+					Saldo -= lancamentoRemover.Valor;
+				}
+
+				if (e.Lancamento.Tipo == LancamentoTipo.Despesa)
+				{
+					TotalContasAPagar -= lancamentoRemover.Valor;
+					Saldo += lancamentoRemover.Valor;
+				}
+
 				_lancamentos.Remove(lancamentoRemover);
 
-				AtualizarSaldos();
-
 			});
 		}
 
-		private void AtualizarSaldos()
-		{
-			TotalContasAReceber = 0;
-			TotalContasAPagar = 0;
-			Saldo = 0;
-
-			_lancamentos.ForEach(lancamento =>
-			{
-				if (lancamento.Tipo == LancamentoTipo.Receita)
-				{
-					TotalContasAReceber += lancamento.Valor;
-					Saldo += lancamento.Valor;
-				}
-				else if (lancamento.Tipo == LancamentoTipo.Despesa)
-				{
-					TotalContasAPagar += lancamento.Valor;
-					Saldo -= lancamento.Valor;
-				}
-			});
-		}
-
-		public Competencia(Guid id, Ano ano, Mes mes, List<Lancamento> lancamentos) : base(id)
+		public CompetenciaAggregateRoot(Guid id, Ano ano, Mes mes) : base(id)
 		{
 			Register();
 
 			Ano = ano;
 			Mes = mes;
-
-			foreach (var item in lancamentos)
-			{
-				DomainEvents.Raise(new LancamentoAdicionado(item));
-			}
 
 			DomainEvents.Raise(new CompetenciaCriada(this));
 

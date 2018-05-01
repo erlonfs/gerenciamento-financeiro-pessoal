@@ -14,7 +14,7 @@ namespace Competencia.Domain.CompetenciaAggregate
 		public FormaDePagamento FormaDePagto { get; private set; }
 		public string Anotacao { get; private set; }
 
-		private Lancamento(Guid id)
+		private Lancamento(Guid id) : base(id)
 		{
 
 		}
@@ -26,7 +26,7 @@ namespace Competencia.Domain.CompetenciaAggregate
 			if (!Enum.IsDefined(typeof(LancamentoTipo), tipo)) throw new ArgumentOutOfRangeException(nameof(tipo));
 			if (categoriaId <= 0) throw new ArgumentOutOfRangeException(nameof(categoriaId));
 
-			return new Lancamento(new Guid())
+			return new Lancamento(Guid.NewGuid())
 			{
 				Tipo = tipo,
 				CategoriaId = categoriaId,

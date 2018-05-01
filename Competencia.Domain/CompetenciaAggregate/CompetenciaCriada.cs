@@ -5,10 +5,10 @@ namespace Competencia.Domain.CompetenciaAggregate
 {
 	public class CompetenciaCriada : IDomainEvent
 	{
-		public Competencia Competencia { get; }
+		public CompetenciaAggregateRoot Competencia { get; }
 		public DateTime DataCriacao { get; }
 
-		public CompetenciaCriada(Competencia competencia)
+		public CompetenciaCriada(CompetenciaAggregateRoot competencia)
 		{
 			Competencia = competencia;
 			DataCriacao = DateTime.Now;
