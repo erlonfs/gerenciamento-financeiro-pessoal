@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Competencia.Data;
+using Competencia.Domain.CompetenciaAggregate;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SharedKernel.Common.ValueObjects;
 using System;
 using System.Collections.Generic;
 
@@ -23,6 +27,23 @@ namespace Competencia.Api.Controllers
 		[HttpPost]
 		public void Post([FromBody]string value)
 		{
+			var options = new DbContextOptionsBuilder<AppDbContext>()
+			 .UseInMemoryDatabase(databaseName: "test")
+			 .Options;
+
+			using (var context = new AppDbContext(options))
+			{
+				var id = Guid.NewGuid();
+				var competencia = new CompetenciaAggregateRoot(id, new Ano(2018), Mes.Janeiro);
+
+				context.Competencia.Add(new Data.Model.Competencia {
+					Mes = (int)competencia.Mes,
+					Ano = competencia.Ano.Numero
+				});
+
+				context.SaveChanges();
+			}
+
 		}
 
 		[HttpPut("{id:guid}")]

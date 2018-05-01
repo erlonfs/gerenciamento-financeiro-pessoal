@@ -21,4 +21,10 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Competencia.Data\Competencia.Data.csproj" />
+    <ProjectReference Include="..\Competencia.Domain\Competencia.Domain.csproj" />
+    <ProjectReference Include="..\SharedKernel.Common\SharedKernel.Common.csproj" />
+  </ItemGroup>
+
 </Project>
