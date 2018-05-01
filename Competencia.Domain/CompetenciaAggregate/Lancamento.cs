@@ -3,40 +3,17 @@ using System;
 
 namespace Competencia.Domain.CompetenciaAggregate
 {
-	public sealed class Lancamento : Entity<Guid>
+	public abstract class Lancamento : Entity<Guid>
 	{
-		public LancamentoTipo Tipo { get; private set; }
-		public int CategoriaId { get; private set; }
-		public DateTime Data { get; private set; }
-		public string Descricao { get; private set; }
-		public bool IsLancamentoPago { get; private set; }
-		public decimal Valor { get; private set; }
-		public FormaDePagamento FormaDePagto { get; private set; }
-		public string Anotacao { get; private set; }
+		protected Lancamento(Guid id) : base(id) { }
 
-		private Lancamento(Guid id) : base(id)
-		{
-
-		}
-
-		public static Lancamento Create(LancamentoTipo tipo, int categoriaId, DateTime data, string descricao,
-										bool isLancamentoPago, decimal valor, FormaDePagamento formaDePagto, string anotacao)
-		{
-
-			if (!Enum.IsDefined(typeof(LancamentoTipo), tipo)) throw new ArgumentOutOfRangeException(nameof(tipo));
-			if (categoriaId <= 0) throw new ArgumentOutOfRangeException(nameof(categoriaId));
-
-			return new Lancamento(Guid.NewGuid())
-			{
-				Tipo = tipo,
-				CategoriaId = categoriaId,
-				Data = data,
-				Descricao = descricao,
-				IsLancamentoPago = isLancamentoPago,
-				Valor = valor,
-				FormaDePagto = formaDePagto,
-				Anotacao = anotacao
-			};
-		}
+		public virtual LancamentoTipo Tipo { get; protected set; }
+		public int CategoriaId { get; protected set; }
+		public DateTime Data { get; protected set; }
+		public string Descricao { get; protected set; }
+		public bool IsLancamentoPago { get; protected set; }
+		public decimal Valor { get; protected set; }
+		public FormaDePagamento FormaDePagto { get; protected set; }
+		public string Anotacao { get; protected set; }
 	}
 }

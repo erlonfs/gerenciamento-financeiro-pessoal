@@ -7,7 +7,6 @@ namespace Competencia.Domain.Test
 {
 	public class LancamentoTest
 	{
-		private readonly LancamentoTipo _tipo = LancamentoTipo.Receita;
 		private readonly int _categoriaId = 1;
 		private readonly DateTime _data = DateTime.Today;
 		private readonly string _descricao = "Carne";
@@ -17,41 +16,58 @@ namespace Competencia.Domain.Test
 		private readonly string _anotacao = "Carne para o churrasco";
 
 		[Fact]
-		public void Quando_criar_lancamento_deve_constar_todos_os_dados_informados()
+		public void Quando_criar_receita_deve_constar_todos_os_dados_informados()
 		{
-			var lancamento = Lancamento.Create(_tipo, _categoriaId, _data, _descricao, _isLancamentoPago, _valor,
+			var receita = Receita.Create(_categoriaId, _data, _descricao, _isLancamentoPago, _valor,
 										   _formaDePagto, _anotacao);
 
-			lancamento.Tipo.Should().Be(_tipo);
-			lancamento.CategoriaId.Should().Be(_categoriaId);
-			lancamento.Data.Should().Be(_data);
-			lancamento.Descricao.Should().Be(_descricao);
-			lancamento.IsLancamentoPago.Should().Be(_isLancamentoPago);
-			lancamento.Valor.Should().Be(_valor);
-			lancamento.FormaDePagto.Should().Be(_formaDePagto);
-			lancamento.Anotacao.Should().Be(_anotacao);
+			receita.Tipo.Should().Be(LancamentoTipo.Receita);
+			receita.CategoriaId.Should().Be(_categoriaId);
+			receita.Data.Should().Be(_data);
+			receita.Descricao.Should().Be(_descricao);
+			receita.IsLancamentoPago.Should().Be(_isLancamentoPago);
+			receita.Valor.Should().Be(_valor);
+			receita.FormaDePagto.Should().Be(_formaDePagto);
+			receita.Anotacao.Should().Be(_anotacao);
 		}
 
 		[Fact]
-		public void Nao_pode_criar_lancamento_com_tipo_de_lancamento_invalido()
+		public void Quando_criar_despesa_deve_constar_todos_os_dados_informados()
 		{
-			Action act = () => Lancamento.Create(default(LancamentoTipo), _categoriaId, _data, _descricao, _isLancamentoPago, _valor,
+			var despesa = Despesa.Create(_categoriaId, _data, _descricao, _isLancamentoPago, _valor,
+										   _formaDePagto, _anotacao);
+
+			despesa.Tipo.Should().Be(LancamentoTipo.Despesa);
+			despesa.CategoriaId.Should().Be(_categoriaId);
+			despesa.Data.Should().Be(_data);
+			despesa.Descricao.Should().Be(_descricao);
+			despesa.IsLancamentoPago.Should().Be(_isLancamentoPago);
+			despesa.Valor.Should().Be(_valor);
+			despesa.FormaDePagto.Should().Be(_formaDePagto);
+			despesa.Anotacao.Should().Be(_anotacao);
+		}
+
+		[Theory]
+		[InlineData(0)]
+		[InlineData(-1)]
+		public void Nao_pode_criar_receita_com_categoria_invalida(int categoriaId)
+		{
+			Action act = () => Receita.Create(categoriaId, _data, _descricao, _isLancamentoPago, _valor,
 							  _formaDePagto, _anotacao);
 
-			Assert.Throws<ArgumentOutOfRangeException>(act).ParamName.Should().Be("tipo");
+			Assert.Throws<ArgumentOutOfRangeException>(act).ParamName.Should().Be("categoriaId"); ;
 
 		}
 
 		[Theory]
 		[InlineData(0)]
 		[InlineData(-1)]
-		public void Nao_pode_criar_lancamento_com_categoria_invalida(int categoriaId)
+		public void Nao_pode_criar_despesa_com_categoria_invalida(int categoriaId)
 		{
-			Action act = () => Lancamento.Create(_tipo, categoriaId, _data, _descricao, _isLancamentoPago, _valor,
+			Action act = () => Receita.Create(categoriaId, _data, _descricao, _isLancamentoPago, _valor,
 							  _formaDePagto, _anotacao);
 
 			Assert.Throws<ArgumentOutOfRangeException>(act).ParamName.Should().Be("categoriaId"); ;
-
 
 		}
 	}

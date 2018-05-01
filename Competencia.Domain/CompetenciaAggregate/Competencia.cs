@@ -20,67 +20,71 @@ namespace Competencia.Domain.CompetenciaAggregate
 
 		private void Register()
 		{
-			DomainEvents.Register<LancamentoAdicionado>(e =>
+			DomainEvents.Register<ReceitaAdicionada>(e =>
 			{
-				_lancamentos.Add(e.Lancamento);
+				_lancamentos.Add(e.Receita);
 
-				if (e.Lancamento.Tipo == LancamentoTipo.Receita)
-				{
-					TotalContasAReceber += e.Lancamento.Valor;
-					Saldo += e.Lancamento.Valor;
-				}
-
-				if (e.Lancamento.Tipo == LancamentoTipo.Despesa)
-				{
-					TotalContasAPagar += e.Lancamento.Valor;
-					Saldo -= e.Lancamento.Valor;
-				}
+				TotalContasAReceber += e.Receita;
+				Saldo += e.Receita;
 
 			});
 
-			DomainEvents.Register<LancamentoAlterado>(e =>
+			DomainEvents.Register<DespesaAdicionada>(e =>
 			{
-				var lancamentoAlterar = _lancamentos.SingleOrDefault(x => x.Id == e.Lancamento.Id);
+				_lancamentos.Add(e.Despesa);
 
-				if (e.Lancamento.Tipo == LancamentoTipo.Receita)
-				{
-					TotalContasAReceber -= lancamentoAlterar.Valor;
-					TotalContasAReceber += e.Lancamento.Valor;
-
-					Saldo -= lancamentoAlterar.Valor;
-					Saldo += e.Lancamento.Valor;
-				}
-
-				if (e.Lancamento.Tipo == LancamentoTipo.Despesa)
-				{
-					TotalContasAPagar -= lancamentoAlterar.Valor;
-					TotalContasAPagar += e.Lancamento.Valor;
-
-					Saldo += lancamentoAlterar.Valor;
-					Saldo -= e.Lancamento.Valor;
-				}
-
-				lancamentoAlterar = e.Lancamento;
+				TotalContasAPagar += e.Despesa;
+				Saldo += e.Despesa;
 
 			});
 
-			DomainEvents.Register<LancamentoRemovido>(e =>
+			DomainEvents.Register<ReceitaAlterada>(e =>
 			{
-				var lancamentoRemover = _lancamentos.SingleOrDefault(x => x.Id == e.Lancamento.Id);
+				var receitaAlterar = _lancamentos.SingleOrDefault(x => x.Id == e.Receita.Id) as Receita;
 
-				if (e.Lancamento.Tipo == LancamentoTipo.Receita)
-				{
-					TotalContasAReceber -= lancamentoRemover.Valor;
-					Saldo -= lancamentoRemover.Valor;
-				}
+				TotalContasAReceber -= receitaAlterar;
+				TotalContasAReceber += e.Receita;
 
-				if (e.Lancamento.Tipo == LancamentoTipo.Despesa)
-				{
-					TotalContasAPagar -= lancamentoRemover.Valor;
-					Saldo += lancamentoRemover.Valor;
-				}
+				Saldo -= receitaAlterar;
+				Saldo += e.Receita;
 
-				_lancamentos.Remove(lancamentoRemover);
+				receitaAlterar = e.Receita;
+
+			});
+
+			DomainEvents.Register<DespesaAlterada>(e =>
+			{
+				var despesaAlterar = _lancamentos.SingleOrDefault(x => x.Id == e.Despesa.Id) as Despesa;
+
+				TotalContasAPagar -= despesaAlterar;
+				TotalContasAPagar += e.Despesa;
+
+				Saldo -= despesaAlterar;
+				Saldo += e.Despesa;
+
+				despesaAlterar = e.Despesa;
+
+			});
+
+			DomainEvents.Register<ReceitaRemovida>(e =>
+			{
+				var receitaRemover = _lancamentos.SingleOrDefault(x => x.Id == e.Receita.Id) as Receita;
+
+				TotalContasAReceber -= receitaRemover;
+				Saldo -= receitaRemover;
+
+				_lancamentos.Remove(receitaRemover);
+
+			});
+
+			DomainEvents.Register<DespesaRemovida>(e =>
+			{
+				var despesaRemover = _lancamentos.SingleOrDefault(x => x.Id == e.Despesa.Id) as Despesa;
+
+				TotalContasAPagar -= despesaRemover;
+				Saldo -= despesaRemover;
+
+				_lancamentos.Remove(despesaRemover);
 
 			});
 		}
@@ -96,19 +100,34 @@ namespace Competencia.Domain.CompetenciaAggregate
 
 		}
 
-		public void AdicionarLancamento(Lancamento lancamento)
+		public void AdicionarReceita(Receita receita)
 		{
-			DomainEvents.Raise(new LancamentoAdicionado(lancamento));
+			DomainEvents.Raise(new ReceitaAdicionada(receita));
 		}
 
-		public void AlterarLancamento(Lancamento lancamento)
+		public void AdicionarDespesa(Despesa despesa)
 		{
-			DomainEvents.Raise(new LancamentoAlterado(lancamento));
+			DomainEvents.Raise(new DespesaAdicionada(despesa));
 		}
 
-		public void RemoverLancamento(Lancamento lancamento)
+		public void AlterarReceita(Receita receita)
 		{
-			DomainEvents.Raise(new LancamentoRemovido(lancamento));
+			DomainEvents.Raise(new ReceitaAlterada(receita));
+		}
+
+		public void AlterarDespesa(Despesa despesa)
+		{
+			DomainEvents.Raise(new DespesaAlterada(despesa));
+		}
+
+		public void RemoverReceita(Receita receita)
+		{
+			DomainEvents.Raise(new ReceitaRemovida(receita));
+		}
+
+		public void RemoverDespesa(Despesa despesa)
+		{
+			DomainEvents.Raise(new DespesaRemovida(despesa));
 		}
 
 	}

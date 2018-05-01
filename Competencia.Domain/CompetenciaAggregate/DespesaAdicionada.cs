@@ -3,14 +3,14 @@ using SharedKernel.Common;
 
 namespace Competencia.Domain.CompetenciaAggregate
 {
-	public class LancamentoRemovido : IDomainEvent
+	public class DespesaAdicionada : IDomainEvent
 	{
-		public Lancamento Lancamento { get; }
+		public Despesa Despesa { get; }
 		public DateTime DataCriacao { get; }
 
-		public LancamentoRemovido(Lancamento lancamento)
+		public DespesaAdicionada(Despesa despesa)
 		{
-			Lancamento = lancamento;
+			Despesa = despesa;
 			DataCriacao = DateTime.Now;
 		}
 	}
