@@ -7,6 +7,7 @@ namespace Competencia.Domain.Test
 {
 	public class LancamentoTest
 	{
+		private readonly Guid _id = Guid.NewGuid();
 		private readonly int _categoriaId = 1;
 		private readonly DateTime _data = DateTime.Today;
 		private readonly string _descricao = "Carne";
@@ -18,7 +19,7 @@ namespace Competencia.Domain.Test
 		[Fact]
 		public void Quando_criar_receita_deve_constar_todos_os_dados_informados()
 		{
-			var receita = Receita.Create(_categoriaId, _data, _descricao, _isLancamentoPago, _valor,
+			var receita = Receita.Create(_id, _categoriaId, _data, _descricao, _isLancamentoPago, _valor,
 										   _formaDePagto, _anotacao);
 
 			receita.Tipo.Should().Be(LancamentoTipo.Receita);
@@ -34,7 +35,7 @@ namespace Competencia.Domain.Test
 		[Fact]
 		public void Quando_criar_despesa_deve_constar_todos_os_dados_informados()
 		{
-			var despesa = Despesa.Create(_categoriaId, _data, _descricao, _isLancamentoPago, _valor,
+			var despesa = Despesa.Create(_id, _categoriaId, _data, _descricao, _isLancamentoPago, _valor,
 										   _formaDePagto, _anotacao);
 
 			despesa.Tipo.Should().Be(LancamentoTipo.Despesa);
@@ -52,7 +53,7 @@ namespace Competencia.Domain.Test
 		[InlineData(-1)]
 		public void Nao_pode_criar_receita_com_categoria_invalida(int categoriaId)
 		{
-			Action act = () => Receita.Create(categoriaId, _data, _descricao, _isLancamentoPago, _valor,
+			Action act = () => Receita.Create(_id, categoriaId, _data, _descricao, _isLancamentoPago, _valor,
 							  _formaDePagto, _anotacao);
 
 			Assert.Throws<ArgumentOutOfRangeException>(act).ParamName.Should().Be("categoriaId"); ;
@@ -64,7 +65,7 @@ namespace Competencia.Domain.Test
 		[InlineData(-1)]
 		public void Nao_pode_criar_despesa_com_categoria_invalida(int categoriaId)
 		{
-			Action act = () => Receita.Create(categoriaId, _data, _descricao, _isLancamentoPago, _valor,
+			Action act = () => Receita.Create(_id, categoriaId, _data, _descricao, _isLancamentoPago, _valor,
 							  _formaDePagto, _anotacao);
 
 			Assert.Throws<ArgumentOutOfRangeException>(act).ParamName.Should().Be("categoriaId"); ;

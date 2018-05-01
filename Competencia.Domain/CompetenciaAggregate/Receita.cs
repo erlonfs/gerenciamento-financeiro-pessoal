@@ -6,15 +6,15 @@ namespace Competencia.Domain.CompetenciaAggregate
 	{
 		public override LancamentoTipo Tipo => LancamentoTipo.Receita;
 
-		public Receita(Guid id) : base(id) { }
+		private Receita(Guid id) : base(id) { }
 
-		public static Receita Create(int categoriaId, DateTime data, string descricao,
+		public static Receita Create(Guid id, int categoriaId, DateTime data, string descricao,
 										bool isLancamentoPago, decimal valor, FormaDePagamento formaDePagto, string anotacao)
 		{
 
 			if (categoriaId <= 0) throw new ArgumentOutOfRangeException(nameof(categoriaId));
 
-			return new Receita(Guid.NewGuid())
+			return new Receita(id)
 			{
 				CategoriaId = categoriaId,
 				Data = data,

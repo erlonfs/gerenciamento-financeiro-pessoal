@@ -12,14 +12,24 @@ namespace Competencia.Domain.Test
 		private static readonly FormaDePagamento _formaDePagto = FormaDePagamento.Dinheiro;
 		private static readonly string _anotacao = "Carne para o churrasco";
 
+		public static Despesa CreateDespesaComValor(Guid id, decimal valor)
+		{
+			return Despesa.Create(id, _categoriaId, _data, _descricao, _isLancamentoPago, valor, _formaDePagto, _anotacao);
+		}
+
 		public static Despesa CreateDespesaComValor(decimal valor)
 		{
-			return Despesa.Create(_categoriaId, _data, _descricao, _isLancamentoPago, valor, _formaDePagto, _anotacao);
+			return Despesa.Create(Guid.NewGuid(), _categoriaId, _data, _descricao, _isLancamentoPago, valor, _formaDePagto, _anotacao);
+		}
+
+		public static Receita CreateReceitaComValor(Guid id, decimal valor)
+		{
+			return Receita.Create(id, _categoriaId, _data, _descricao, _isLancamentoPago, valor, _formaDePagto, _anotacao);
 		}
 
 		public static Receita CreateReceitaComValor(decimal valor)
 		{
-			return Receita.Create(_categoriaId, _data, _descricao, _isLancamentoPago, valor, _formaDePagto, _anotacao);
+			return Receita.Create(Guid.NewGuid(), _categoriaId, _data, _descricao, _isLancamentoPago, valor, _formaDePagto, _anotacao);
 		}
 	}
 }

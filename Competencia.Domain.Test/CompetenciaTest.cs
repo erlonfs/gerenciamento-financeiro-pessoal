@@ -51,19 +51,31 @@ namespace Competencia.Domain.Test
 		}
 
 		[Fact]
-		public void Quando_remover_lancamento_deve_constar_saldos_e_totais_corretamente()
+		public void Quando_ocorrer_lancamentos_diversos_deve_constar_saldos_e_totais_corretamente()
 		{
 			var competencia = new CompetenciaAggregateRoot(_competenciaId, _ano, _mes);
 
-			var lancamentoARemover = LancamentoStub.CreateDespesaComValor(50);
+			var receitaAlterar = LancamentoStub.CreateReceitaComValor(55);
+			var despesaAlterar = LancamentoStub.CreateDespesaComValor(85);
 
-			competencia.AdicionarDespesa(lancamentoARemover);
+			var receitaARemover = LancamentoStub.CreateReceitaComValor(60);
+			var despesaARemover = LancamentoStub.CreateDespesaComValor(50);
+
+			competencia.AdicionarDespesa(despesaARemover);
 			competencia.AdicionarReceita(LancamentoStub.CreateReceitaComValor(10));
-			competencia.RemoverDespesa(lancamentoARemover);
+			competencia.RemoverDespesa(despesaARemover);
+			competencia.AdicionarReceita(receitaARemover);
+			competencia.RemoverReceita(receitaARemover);
 
-			competencia.Saldo.Should().Be(10);
-			competencia.TotalContasAPagar.Should().Be(0);
-			competencia.TotalContasAReceber.Should().Be(10);
+			competencia.AdicionarReceita(receitaAlterar);
+			competencia.AlterarReceita(LancamentoStub.CreateReceitaComValor(receitaAlterar.Id, 90));
+
+			competencia.AdicionarDespesa(despesaAlterar);
+			competencia.AlterarDespesa(LancamentoStub.CreateDespesaComValor(despesaAlterar.Id, 90));
+
+			competencia.Saldo.Should().Be(10M);
+			competencia.TotalContasAPagar.Should().Be(-90M);
+			competencia.TotalContasAReceber.Should().Be(100M);
 		}
 	}
 }

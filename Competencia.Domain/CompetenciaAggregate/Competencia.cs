@@ -41,6 +41,7 @@ namespace Competencia.Domain.CompetenciaAggregate
 			DomainEvents.Register<ReceitaAlterada>(e =>
 			{
 				var receitaAlterar = _lancamentos.SingleOrDefault(x => x.Id == e.Receita.Id) as Receita;
+				if (receitaAlterar == null) return;
 
 				TotalContasAReceber -= receitaAlterar;
 				TotalContasAReceber += e.Receita;
@@ -55,6 +56,7 @@ namespace Competencia.Domain.CompetenciaAggregate
 			DomainEvents.Register<DespesaAlterada>(e =>
 			{
 				var despesaAlterar = _lancamentos.SingleOrDefault(x => x.Id == e.Despesa.Id) as Despesa;
+				if (despesaAlterar == null) return;
 
 				TotalContasAPagar -= despesaAlterar;
 				TotalContasAPagar += e.Despesa;
@@ -69,6 +71,7 @@ namespace Competencia.Domain.CompetenciaAggregate
 			DomainEvents.Register<ReceitaRemovida>(e =>
 			{
 				var receitaRemover = _lancamentos.SingleOrDefault(x => x.Id == e.Receita.Id) as Receita;
+				if (receitaRemover == null) return;
 
 				TotalContasAReceber -= receitaRemover;
 				Saldo -= receitaRemover;
@@ -80,6 +83,7 @@ namespace Competencia.Domain.CompetenciaAggregate
 			DomainEvents.Register<DespesaRemovida>(e =>
 			{
 				var despesaRemover = _lancamentos.SingleOrDefault(x => x.Id == e.Despesa.Id) as Despesa;
+				if (despesaRemover == null) return;
 
 				TotalContasAPagar -= despesaRemover;
 				Saldo -= despesaRemover;
