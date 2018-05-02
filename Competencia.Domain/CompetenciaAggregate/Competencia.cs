@@ -106,11 +106,17 @@ namespace Competencia.Domain.CompetenciaAggregate
 
 		public void AdicionarReceita(Receita receita)
 		{
+			var existeReceita = _lancamentos.OfType<Receita>().Any(x => x.Id == receita.Id);
+			if (existeReceita) throw new Exception("Receita já adicionada!");
+
 			DomainEvents.Raise(new ReceitaAdicionada(receita));
 		}
 
 		public void AdicionarDespesa(Despesa despesa)
 		{
+			var existeDespesa = _lancamentos.OfType<Despesa>().Any(x => x.Id == despesa.Id);
+			if (existeDespesa) throw new Exception("Despesa já adicionada!");
+
 			DomainEvents.Raise(new DespesaAdicionada(despesa));
 		}
 
