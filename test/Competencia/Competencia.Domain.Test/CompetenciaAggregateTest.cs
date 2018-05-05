@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Competencia.Domain.Test
 {
-	public class CompetenciaTest
+	public class CompetenciaAggregateTest
 	{
 		private readonly Guid _competenciaId = Guid.NewGuid();
 		private readonly Mes _mes = Mes.Janeiro;
