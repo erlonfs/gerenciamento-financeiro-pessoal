@@ -12,72 +12,47 @@ namespace Competencia.Api.Controllers
 	[Route("api/competencia")]
 	public class CompetenciaController : Controller
 	{
-		[HttpGet]
-		public IEnumerable<string> Get()
-		{
-			return new string[] { "value1", "value2" };
-		}
+		private readonly AppDbContext _appDbContext;
 
-		[HttpGet("{id:guid}", Name = "Get")]
-		public string Get(Guid id)
+		public CompetenciaController(AppDbContext appDbContext)
 		{
-			return "value";
+			_appDbContext = appDbContext;
 		}
 
 		[HttpPost]
-		public void Post([FromBody]string value)
+		public void Post()
 		{
-			var options = new DbContextOptionsBuilder<AppDbContext>().Options;
 
-			using (var context = new AppDbContext(options))
+			var id = Guid.NewGuid();
+			var competencia = new CompetenciaAggregateRoot(id, new Ano(2018), Mes.Janeiro);
+
+			_appDbContext.Competencia.Add(new Data.Model.Competencia
 			{
-				var id = Guid.NewGuid();
-				var competencia = new CompetenciaAggregateRoot(id, new Ano(2018), Mes.Janeiro);
-
-				context.Competencia.Add(new Data.Model.Competencia
-				{
-					DataCriacao = DateTime.Now,
-					Mes = (int)competencia.Mes,
-					Ano = competencia.Ano.Numero,
-					Lancamentos = new HashSet<Data.Model.Lancamento>
+				DataCriacao = DateTime.Now,
+				Mes = (int)competencia.Mes,
+				Ano = competencia.Ano.Numero,
+				Lancamentos = new HashSet<Data.Model.Lancamento>
 					{
 						new Data.Model.Lancamento
 						{
-							DataCriacao = DateTime.Now
-						},
+							DataCriacao = DateTime.Now,
+							Anotacao = "Teste de lançamento",
+							CategoriaId = 1,
+							Data = new DateTime(2018,04,02),
+							Descricao = "Compras",
+							FormaDePagtoId = (int)FormaDePagamento.Credito,
+							IsLancamentoPago = true,
+							TipoId = (int)LancamentoTipo.Despesa,
+							Valor = 78.64M
 
-						new Data.Model.Lancamento
-						{
-							DataCriacao = DateTime.Now
-						},
-
-						new Data.Model.Lancamento
-						{
-							DataCriacao = DateTime.Now
-						},
-
-						new Data.Model.Lancamento
-						{
-							DataCriacao = DateTime.Now
 						}
 					}
-				});
+			});
 
+			_appDbContext.SaveChanges();
 
-
-				context.SaveChanges();
-			}
 
 		}
 
-		[HttpPut("{id:guid}")]
-		public void Put(Guid id, [FromBody]string value)
-		{
-		}
-
-		[HttpDelete("{id}")]
-		public void Delete(int id)
-		{
-		}
 	}
 }

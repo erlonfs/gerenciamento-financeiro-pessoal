@@ -3,7 +3,8 @@
 	public enum FormaDePagamento
 	{
 		Debito = 1,
-		Dinheiro = 2,
-		Boleto = 3
-    }
+		Credito = 2,
+		Dinheiro = 3,
+		Boleto = 4
+	}
 }

@@ -5,4 +5,4 @@ USE GerenciamentoFinanceiro;
 GO
 
 CREATE SCHEMA COMP;
-GO;
+GO

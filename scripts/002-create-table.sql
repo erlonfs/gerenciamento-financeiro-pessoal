@@ -1,4 +1,10 @@
+USE GerenciamentoFinanceiro;
+GO
+
+DROP TABLE COMP.FormaPagto;
 DROP TABLE COMP.Lancamento;
+DROP TABLE COMP.LancamentoTipo;
+DROP TABLE COMP.LancamentoCategoria;
 DROP TABLE COMP.Competencia;
 
 CREATE TABLE COMP.Competencia(
@@ -11,12 +17,47 @@ GO
 ALTER TABLE COMP.Competencia ADD CONSTRAINT PK_Competencia PRIMARY KEY (Id)
 GO
 
+CREATE TABLE COMP.FormaPagto(
+	Id INT NOT NULL,
+	Nome VARCHAR(200) NOT NULL
+)
+GO
+ALTER TABLE COMP.FormaPagto ADD CONSTRAINT PK_FormaPagto PRIMARY KEY (Id)
+GO
+
+CREATE TABLE COMP.LancamentoTipo(
+	Id INT NOT NULL,
+	Nome VARCHAR(200) NOT NULL
+)
+GO
+ALTER TABLE COMP.LancamentoTipo ADD CONSTRAINT PK_LancamentoTipo PRIMARY KEY (Id)
+GO
+
+CREATE TABLE COMP.LancamentoCategoria(
+	Id INT IDENTITY NOT NULL,
+	DataCriacao DATETIME NOT NULL,
+	Nome VARCHAR(200) NOT NULL
+)
+GO
+ALTER TABLE COMP.LancamentoCategoria ADD CONSTRAINT PK_LancamentoCategoria PRIMARY KEY (Id)
+GO
+
 CREATE TABLE COMP.Lancamento(
 	Id INT IDENTITY NOT NULL,
 	DataCriacao DATETIME NOT NULL,
-	CompetenciaId INT NOT NULL
+	TipoId INT NOT NULL,
+	CompetenciaId INT NOT NULL,
+	CategoriaId INT NOT NULL,
+	Data DATETIME NOT NULL,
+	Descricao VARCHAR(200) NULL,
+	IsLancamentoPago BIT NOT NULL,
+	Valor DECIMAL NOT NULL,
+	FormaDePagtoId INT NOT NULL,
+	Anotacao VARCHAR(2000) NULL	
 )
 GO
 ALTER TABLE COMP.Lancamento ADD CONSTRAINT PK_Lancamento PRIMARY KEY (Id)
+ALTER TABLE COMP.Lancamento ADD CONSTRAINT FK_Lancamento_Tipo FOREIGN KEY (TipoId) REFERENCES COMP.LancamentoTipo(Id);
+ALTER TABLE COMP.Lancamento ADD CONSTRAINT FK_Lancamento_Categoria FOREIGN KEY (CategoriaId) REFERENCES COMP.LancamentoCategoria(Id);
 ALTER TABLE COMP.Lancamento ADD CONSTRAINT FK_Lancamento_Competencia FOREIGN KEY (CompetenciaId) REFERENCES COMP.Competencia(Id);
 GO
