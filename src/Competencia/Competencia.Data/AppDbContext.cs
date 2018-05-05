@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Competencia.Data.Mapping;
+using Microsoft.EntityFrameworkCore;
 
 namespace Competencia.Data
 {
@@ -13,8 +14,14 @@ namespace Competencia.Data
 		{
 			if (!optionsBuilder.IsConfigured)
 			{
-				optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=EFProviders.InMemory;Trusted_Connection=True;ConnectRetryCount=0");
+				optionsBuilder.UseSqlServer(@"Data Source=10.0.75.1;Initial Catalog=GerenciamentoFinanceiro;User Id=SA;Password=GuiGui@2016;");
 			}
+		}
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.ApplyConfiguration(new CompetenciaMap());
+			modelBuilder.ApplyConfiguration(new LancamentoMap());
 		}
 	}
 }

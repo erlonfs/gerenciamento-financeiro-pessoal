@@ -27,19 +27,43 @@ namespace Competencia.Api.Controllers
 		[HttpPost]
 		public void Post([FromBody]string value)
 		{
-			var options = new DbContextOptionsBuilder<AppDbContext>()
-			 .UseInMemoryDatabase(databaseName: "test")
-			 .Options;
+			var options = new DbContextOptionsBuilder<AppDbContext>().Options;
 
 			using (var context = new AppDbContext(options))
 			{
 				var id = Guid.NewGuid();
 				var competencia = new CompetenciaAggregateRoot(id, new Ano(2018), Mes.Janeiro);
 
-				context.Competencia.Add(new Data.Model.Competencia {
+				context.Competencia.Add(new Data.Model.Competencia
+				{
+					DataCriacao = DateTime.Now,
 					Mes = (int)competencia.Mes,
-					Ano = competencia.Ano.Numero
+					Ano = competencia.Ano.Numero,
+					Lancamentos = new HashSet<Data.Model.Lancamento>
+					{
+						new Data.Model.Lancamento
+						{
+							DataCriacao = DateTime.Now
+						},
+
+						new Data.Model.Lancamento
+						{
+							DataCriacao = DateTime.Now
+						},
+
+						new Data.Model.Lancamento
+						{
+							DataCriacao = DateTime.Now
+						},
+
+						new Data.Model.Lancamento
+						{
+							DataCriacao = DateTime.Now
+						}
+					}
 				});
+
+
 
 				context.SaveChanges();
 			}
