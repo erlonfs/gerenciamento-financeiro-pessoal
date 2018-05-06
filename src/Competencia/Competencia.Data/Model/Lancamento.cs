@@ -5,6 +5,7 @@ namespace Competencia.Data.Model
 	public class Lancamento
 	{
 		public int Id { get; set; }
+		public Guid EntityId { get; set; }
 		public DateTime DataCriacao { get; set; }
 
 		public int TipoId { get; set; }

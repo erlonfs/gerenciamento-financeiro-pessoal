@@ -12,6 +12,7 @@ namespace Competencia.Data.Mapping
 			builder.HasKey(x => x.Id);
 			builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
+			builder.Property(x => x.EntityId);
 			builder.Property(x => x.DataCriacao);
 			builder.Property(x => x.Mes);
 			builder.Property(x => x.Ano);
