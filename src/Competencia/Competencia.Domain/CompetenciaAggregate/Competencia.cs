@@ -18,9 +18,16 @@ namespace Competencia.Domain.CompetenciaAggregate
 		private List<Lancamento> _lancamentos = new List<Lancamento>();
 		public IReadOnlyList<Lancamento> Lancamentos => _lancamentos.AsReadOnly();
 
+		private DomainEvents _domainEvents;
+
+		public CompetenciaAggregateRoot(DomainEvents domainEvents)
+		{
+			_domainEvents = domainEvents;
+		}
+
 		private void Register()
 		{
-			DomainEvents.Register<ReceitaAdicionada>(e =>
+			_domainEvents.Register<ReceitaAdicionada>(e =>
 			{
 				_lancamentos.Add(e.Receita);
 
@@ -29,7 +36,7 @@ namespace Competencia.Domain.CompetenciaAggregate
 
 			});
 
-			DomainEvents.Register<DespesaAdicionada>(e =>
+			_domainEvents.Register<DespesaAdicionada>(e =>
 			{
 				_lancamentos.Add(e.Despesa);
 
@@ -38,7 +45,7 @@ namespace Competencia.Domain.CompetenciaAggregate
 
 			});
 
-			DomainEvents.Register<ReceitaAlterada>(e =>
+			_domainEvents.Register<ReceitaAlterada>(e =>
 			{
 				var receitaAlterar = _lancamentos.SingleOrDefault(x => x.Id == e.Receita.Id) as Receita;
 				if (receitaAlterar == null) return;
@@ -53,7 +60,7 @@ namespace Competencia.Domain.CompetenciaAggregate
 
 			});
 
-			DomainEvents.Register<DespesaAlterada>(e =>
+			_domainEvents.Register<DespesaAlterada>(e =>
 			{
 				var despesaAlterar = _lancamentos.SingleOrDefault(x => x.Id == e.Despesa.Id) as Despesa;
 				if (despesaAlterar == null) return;
@@ -68,7 +75,7 @@ namespace Competencia.Domain.CompetenciaAggregate
 
 			});
 
-			DomainEvents.Register<ReceitaRemovida>(e =>
+			_domainEvents.Register<ReceitaRemovida>(e =>
 			{
 				var receitaRemover = _lancamentos.SingleOrDefault(x => x.Id == e.Receita.Id) as Receita;
 				if (receitaRemover == null) return;
@@ -80,7 +87,7 @@ namespace Competencia.Domain.CompetenciaAggregate
 
 			});
 
-			DomainEvents.Register<DespesaRemovida>(e =>
+			_domainEvents.Register<DespesaRemovida>(e =>
 			{
 				var despesaRemover = _lancamentos.SingleOrDefault(x => x.Id == e.Despesa.Id) as Despesa;
 				if (despesaRemover == null) return;
@@ -93,14 +100,16 @@ namespace Competencia.Domain.CompetenciaAggregate
 			});
 		}
 
-		public CompetenciaAggregateRoot(Guid id, Ano ano, Mes mes) : base(id)
+		public CompetenciaAggregateRoot(DomainEvents domainEvents, Guid id, Ano ano, Mes mes) : base(id)
 		{
+			_domainEvents = domainEvents;
+
 			Register();
 
 			Ano = ano;
 			Mes = mes;
 
-			DomainEvents.Raise(new CompetenciaCriada(this));
+			_domainEvents.Raise(new CompetenciaCriada(this));
 
 		}
 
@@ -109,7 +118,7 @@ namespace Competencia.Domain.CompetenciaAggregate
 			var existeReceita = _lancamentos.OfType<Receita>().Any(x => x.Id == receita.Id);
 			if (existeReceita) throw new Exception("Receita já adicionada!");
 
-			DomainEvents.Raise(new ReceitaAdicionada(receita));
+			_domainEvents.Raise(new ReceitaAdicionada(receita));
 		}
 
 		public void AdicionarDespesa(Despesa despesa)
@@ -117,27 +126,27 @@ namespace Competencia.Domain.CompetenciaAggregate
 			var existeDespesa = _lancamentos.OfType<Despesa>().Any(x => x.Id == despesa.Id);
 			if (existeDespesa) throw new Exception("Despesa já adicionada!");
 
-			DomainEvents.Raise(new DespesaAdicionada(despesa));
+			_domainEvents.Raise(new DespesaAdicionada(despesa));
 		}
 
 		public void AlterarReceita(Receita receita)
 		{
-			DomainEvents.Raise(new ReceitaAlterada(receita));
+			_domainEvents.Raise(new ReceitaAlterada(receita));
 		}
 
 		public void AlterarDespesa(Despesa despesa)
 		{
-			DomainEvents.Raise(new DespesaAlterada(despesa));
+			_domainEvents.Raise(new DespesaAlterada(despesa));
 		}
 
 		public void RemoverReceita(Receita receita)
 		{
-			DomainEvents.Raise(new ReceitaRemovida(receita));
+			_domainEvents.Raise(new ReceitaRemovida(receita));
 		}
 
 		public void RemoverDespesa(Despesa despesa)
 		{
-			DomainEvents.Raise(new DespesaRemovida(despesa));
+			_domainEvents.Raise(new DespesaRemovida(despesa));
 		}
 
 	}

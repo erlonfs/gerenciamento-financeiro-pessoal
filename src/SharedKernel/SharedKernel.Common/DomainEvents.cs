@@ -1,20 +1,23 @@
-﻿using StructureMap;
+﻿using SimpleInjector;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SharedKernel.Common
 {
-	public static class DomainEvents
+	public class DomainEvents
 	{
 		[ThreadStatic]
 		private static List<Delegate> actions;
-		static DomainEvents()
-		{
-			Container = new Container();
-		}
-		public static IContainer Container { get; set; }
 
-		public static void Register<T>(Action<T> callback) where T : IDomainEvent
+		public DomainEvents(Container container)
+		{
+			_container = container;
+		}
+
+		private Container _container { get; }
+
+		public void Register<T>(Action<T> callback) where T : IDomainEvent
 		{
 			if (actions == null)
 			{
@@ -23,14 +26,14 @@ namespace SharedKernel.Common
 			actions.Add(callback);
 		}
 
-		public static void ClearCallbacks()
+		public void ClearCallbacks()
 		{
 			actions = null;
 		}
 
-		public static void Raise<T>(T args) where T : IDomainEvent
+		public void Raise<T>(T args) where T : IDomainEvent
 		{
-			foreach (var handler in Container.GetAllInstances<IHandler<T>>())
+			foreach (var handler in _container.GetAllInstances<IHandler<T>>())
 			{
 				handler.Handle(args);
 			}
