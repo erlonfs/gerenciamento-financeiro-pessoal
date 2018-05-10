@@ -23,7 +23,7 @@ namespace Competencia.Handlers
 				EntityId = e.Competencia.Id
 			});
 
-			_context.SaveChanges();
+			//_context.SaveChanges();
 		}
 	}
 }

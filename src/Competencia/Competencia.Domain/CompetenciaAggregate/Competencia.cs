@@ -18,11 +18,12 @@ namespace Competencia.Domain.CompetenciaAggregate
 		private List<Lancamento> _lancamentos = new List<Lancamento>();
 		public IReadOnlyList<Lancamento> Lancamentos => _lancamentos.AsReadOnly();
 
-		private DomainEvents _domainEvents;
+		private IDomainEvents _domainEvents;
 
-		public CompetenciaAggregateRoot(DomainEvents domainEvents)
+		public CompetenciaAggregateRoot(IDomainEvents domainEvents)
 		{
 			_domainEvents = domainEvents;
+			Register();
 		}
 
 		private void Register()
@@ -100,16 +101,15 @@ namespace Competencia.Domain.CompetenciaAggregate
 			});
 		}
 
-		public CompetenciaAggregateRoot(DomainEvents domainEvents, Guid id, Ano ano, Mes mes) : base(id)
+		public CompetenciaAggregateRoot Create(Guid id, Ano ano, Mes mes)
 		{
-			_domainEvents = domainEvents;
-
-			Register();
-
+			Id = id;
 			Ano = ano;
 			Mes = mes;
 
 			_domainEvents.Raise(new CompetenciaCriada(this));
+
+			return this;
 
 		}
 

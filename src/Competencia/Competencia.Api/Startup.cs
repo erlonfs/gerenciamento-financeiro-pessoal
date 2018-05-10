@@ -76,7 +76,7 @@ public class Startup
 		container.RegisterMvcViewComponents(app);
 
 		// Add application services. For instance:
-		container.Register<DomainEvents>(Lifestyle.Singleton);
+		container.Register<IDomainEvents, DomainEvents>(Lifestyle.Singleton);
 
 		var assemblies = new[] { typeof(CompetenciaCriadaHandler).Assembly };
 		container.RegisterCollection(typeof(IHandler<>), assemblies);

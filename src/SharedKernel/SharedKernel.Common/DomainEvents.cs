@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SharedKernel.Common
 {
-	public class DomainEvents
+	public class DomainEvents : IDomainEvents
 	{
 		[ThreadStatic]
 		private static List<Delegate> actions;
@@ -19,10 +19,7 @@ namespace SharedKernel.Common
 
 		public void Register<T>(Action<T> callback) where T : IDomainEvent
 		{
-			if (actions == null)
-			{
-				actions = new List<Delegate>();
-			}
+			if (actions == null) { actions = new List<Delegate>(); }
 			actions.Add(callback);
 		}
 
@@ -42,10 +39,7 @@ namespace SharedKernel.Common
 			{
 				foreach (var action in actions)
 				{
-					if (action is Action<T>)
-					{
-						((Action<T>)action)(args);
-					}
+					if (action is Action<T>) { ((Action<T>)action)(args); }
 				}
 			}
 		}

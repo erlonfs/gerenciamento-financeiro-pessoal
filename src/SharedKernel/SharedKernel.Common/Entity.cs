@@ -4,7 +4,7 @@ namespace SharedKernel.Common
 {
 	public abstract class Entity<TId> : IEquatable<Entity<TId>>
 	{
-		private readonly TId _id;
+		private TId _id;
 
 		protected Entity(TId id)
 		{
@@ -24,6 +24,7 @@ namespace SharedKernel.Common
 		public TId Id
 		{
 			get { return _id; }
+			set { _id = value; }
 		}
 
 		public override bool Equals(object obj)
