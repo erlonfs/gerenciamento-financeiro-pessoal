@@ -4,6 +4,8 @@ using System;
 using SharedKernel.Common.ValueObjects;
 using FluentAssertions;
 using System.Collections.Generic;
+using SharedKernel.Common;
+using Moq;
 
 namespace Competencia.Domain.Test
 {
@@ -24,7 +26,12 @@ namespace Competencia.Domain.Test
 
 		public CompetenciaAggregateTest()
 		{
-			_aggregateRoot = new CompetenciaAggregateRoot(null);
+			var mockDomainEvents = new Mock<IDomainEvents>();
+
+			mockDomainEvents.Setup(x => x.Register(It.IsAny<Action<IDomainEvent>>()));
+			mockDomainEvents.Setup(x => x.Raise(It.IsAny<IDomainEvent>()));
+
+			_aggregateRoot = new CompetenciaAggregateRoot(mockDomainEvents.Object);
 		}
 
 		[Fact]
