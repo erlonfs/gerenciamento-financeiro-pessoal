@@ -1,11 +1,10 @@
-﻿using Xunit;
-using Competencia.Domain.CompetenciaAggregate;
-using System;
-using SharedKernel.Common.ValueObjects;
+﻿using Competencia.Domain.CompetenciaAggregate;
 using FluentAssertions;
-using System.Collections.Generic;
-using SharedKernel.Common;
 using Moq;
+using SharedKernel.Common.ValueObjects;
+using System;
+using System.Collections.Generic;
+using Xunit;
 
 namespace Competencia.Domain.Test
 {
@@ -26,11 +25,7 @@ namespace Competencia.Domain.Test
 
 		public CompetenciaAggregateTest()
 		{
-			var mockDomainEvents = new Mock<IDomainEvents>();
-
-			mockDomainEvents.Setup(x => x.Register(It.IsAny<Action<IDomainEvent>>()));
-			mockDomainEvents.Setup(x => x.Raise(It.IsAny<IDomainEvent>()));
-
+			var mockDomainEvents = new Mock<DomainEventsFake>();
 			_aggregateRoot = new CompetenciaAggregateRoot(mockDomainEvents.Object);
 		}
 
