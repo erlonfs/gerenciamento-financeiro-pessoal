@@ -22,8 +22,6 @@ namespace Competencia.Handlers
 				DataCriacao = e.DataCriacao,
 				EntityId = e.Competencia.Id
 			});
-
-			//_context.SaveChanges();
 		}
 	}
 }

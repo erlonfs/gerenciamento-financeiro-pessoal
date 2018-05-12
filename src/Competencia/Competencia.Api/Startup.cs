@@ -1,4 +1,5 @@
-﻿using Competencia.Data;
+﻿using Competencia.Api;
+using Competencia.Data;
 using Competencia.Domain.CompetenciaAggregate;
 using Competencia.Handlers;
 using Microsoft.AspNetCore.Builder;
@@ -71,11 +72,10 @@ public class Startup
 
 	private void InitializeContainer(IApplicationBuilder app)
 	{
-		// Add application presentation components:
 		container.RegisterMvcControllers(app);
 		container.RegisterMvcViewComponents(app);
 
-		// Add application services. For instance:
+		container.Register<IUnitOfWork, UnitOfWork>(Lifestyle.Scoped);
 		container.Register<IDomainEvents, DomainEvents>(Lifestyle.Singleton);
 
 		var assemblies = new[] { typeof(CompetenciaCriadaHandler).Assembly };
