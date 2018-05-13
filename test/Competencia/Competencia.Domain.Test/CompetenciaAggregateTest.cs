@@ -1,6 +1,7 @@
 ﻿using Competencia.Domain.CompetenciaAggregate;
 using FluentAssertions;
 using Moq;
+using SharedKernel.Common;
 using SharedKernel.Common.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace Competencia.Domain.Test
 	{
 		private readonly CompetenciaAggregateRoot _aggregateRoot;
 		private readonly Guid _competenciaId = Guid.NewGuid();
+		private readonly DateTime _dataCriacao = DateTime.Now;
 		private readonly Mes _mes = Mes.Janeiro;
 		private readonly Ano _ano = new Ano(2018);
 
@@ -25,14 +27,13 @@ namespace Competencia.Domain.Test
 
 		public CompetenciaAggregateTest()
 		{
-			var mockDomainEvents = new Mock<DomainEventsFake>();
-			_aggregateRoot = new CompetenciaAggregateRoot(mockDomainEvents.Object);
+			_aggregateRoot = new CompetenciaAggregateRoot();
 		}
 
 		[Fact]
 		public void Quando_criar_uma_competencia_deve_contar_dados_informados()
 		{
-			var competencia = _aggregateRoot.Create(_competenciaId, _ano, _mes);
+			var competencia = _aggregateRoot.Create(_competenciaId, _dataCriacao, _ano, _mes);
 
 			competencia.Id.Should().Be(_competenciaId);
 			competencia.Ano.Should().Be(_ano);
@@ -48,7 +49,7 @@ namespace Competencia.Domain.Test
 		[InlineData(99, 0, -99, -99, 0)]
 		public void Quando_adicionar_lancamentos_deve_constar_saldos_e_totais_corretamente(decimal despesa, decimal receita, decimal saldo, decimal totalContasAPagar, decimal totalContasAReceber)
 		{
-			var competencia = _aggregateRoot.Create(_competenciaId, _ano, _mes);
+			var competencia = _aggregateRoot.Create(_competenciaId, _dataCriacao, _ano, _mes);
 
 			competencia.AdicionarDespesa(LancamentoStub.CreateDespesaComValor(despesa));
 			competencia.AdicionarReceita(LancamentoStub.CreateReceitaComValor(receita));
@@ -61,7 +62,7 @@ namespace Competencia.Domain.Test
 		[Fact]
 		public void Quando_ocorrer_lancamentos_diversos_deve_constar_saldos_e_totais_corretamente()
 		{
-			var competencia = _aggregateRoot.Create(_competenciaId, _ano, _mes);
+			var competencia = _aggregateRoot.Create(_competenciaId, _dataCriacao, _ano, _mes);
 
 			var receitaAlterar = LancamentoStub.CreateReceitaComValor(55);
 			var despesaAlterar = LancamentoStub.CreateDespesaComValor(85);

@@ -79,12 +79,14 @@ public class Startup
 
 		container.Register<IUnitOfWork, UnitOfWork>(Lifestyle.Scoped);
 		container.Register<ICompetenciaService, CompetenciaService>(Lifestyle.Scoped);
-		container.Register<IDomainEvents, DomainEvents>(Lifestyle.Scoped);
 
 		var assemblies = new[] { typeof(CompetenciaCriadaHandler).Assembly };
 		container.RegisterCollection(typeof(IHandler<>), assemblies);
 
 		// Allow Simple Injector to resolve services from ASP.NET Core.
 		container.AutoCrossWireAspNetComponents(app);
+
+		DomainEvents.Init(container);
+
 	}
 }

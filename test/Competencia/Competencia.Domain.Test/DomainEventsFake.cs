@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Competencia.Domain.Test
 {
-	public class DomainEventsFake : IDomainEvents
+	public class DomainEventsFake
 	{
 		private List<Delegate> actions;
 

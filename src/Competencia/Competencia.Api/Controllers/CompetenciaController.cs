@@ -11,7 +11,7 @@ namespace Competencia.Api.Controllers
 {
 	[Produces("application/json")]
 	[Route("api/competencia")]
-	public class CompetenciaController : Controller
+	public class CompetenciaController : BaseApiController
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly ICompetenciaService _competenciaService;

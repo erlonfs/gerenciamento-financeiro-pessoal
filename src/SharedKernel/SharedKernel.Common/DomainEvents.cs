@@ -1,23 +1,22 @@
 ﻿using SimpleInjector;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SharedKernel.Common
 {
-	public class DomainEvents : IDomainEvents
+	public class DomainEvents
 	{
 		[ThreadStatic]
 		private static List<Delegate> actions;
 
-		public DomainEvents(Container container)
+		public static void Init(Container container)
 		{
 			_container = container;
 		}
 
-		private Container _container { get; }
+		static Container _container { get; set; }
 
-		public void Register<T>(Action<T> callback) where T : IDomainEvent
+		public static void Register<T>(Action<T> callback) where T : IDomainEvent
 		{
 			if (actions == null) { actions = new List<Delegate>(); }
 			actions.Add(callback);
@@ -28,14 +27,14 @@ namespace SharedKernel.Common
 			actions = null;
 		}
 
-		public async Task Raise<T>(T args, bool fromHistory = false) where T : IDomainEvent
+		public static void Raise<T>(T args) where T : IDomainEvent
 		{
-			foreach (var handler in _container.GetAllInstances<IHandler<T>>())
+			if (_container != null)
 			{
-				if (fromHistory) continue;
-
-				await handler.HandleAsync(args);
-
+				foreach (var handler in _container.GetAllInstances<IHandler<T>>())
+				{
+					handler.HandleAsync(args).ConfigureAwait(true);
+				}
 			}
 
 			if (actions != null)

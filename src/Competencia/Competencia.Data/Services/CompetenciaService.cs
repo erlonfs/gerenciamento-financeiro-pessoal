@@ -1,11 +1,14 @@
 ﻿using Competencia.Domain.CompetenciaAggregate;
 using Competencia.Domain.Repositories;
 using Competencia.Domain.Services;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Common;
 using SharedKernel.Common.ValueObjects;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,40 +18,35 @@ namespace Competencia.Data.Services
 	public class CompetenciaService : ICompetenciaService
 	{
 		private readonly AppDbContext _context;
-		private readonly IDomainEvents _domainEvents;
-		private readonly DomainEventsFromHistory _domainEventsFromHistory;
 
-		public CompetenciaService(AppDbContext context, IDomainEvents domainEvents)
+		public CompetenciaService(AppDbContext context)
 		{
 			_context = context;
-			_domainEvents = domainEvents;
 		}
 
 		public Task<CompetenciaAggregateRoot> CriarAsync(int ano, int mes)
 		{
-			var aggregate = new CompetenciaAggregateRoot(_domainEvents);
-
-			aggregate.Create(Guid.NewGuid(), DateTime.Now, new Ano(ano), (Mes)mes);
-
-			_context.Add(new Model.Competencia
-			{
-				Ano = aggregate.Ano.Numero,
-				Mes = (int)aggregate.Mes,
-				DataCriacao = aggregate.DataCriacao,
-				EntityId = aggregate.Id
-			});
-
-			return Task.FromResult(aggregate);
-
+			return Task.FromResult(new CompetenciaAggregateRoot().Create(Guid.NewGuid(), DateTime.Now, new Ano(ano), (Mes)mes));
 		}
 
 		public async Task<CompetenciaAggregateRoot> ObterPorIdAsync(Guid competenciaId)
 		{
-			var competencia = await _context.Competencia.SingleOrDefaultAsync(x => x.EntityId == competenciaId);
+			CompetenciaAggregateRoot aggregate;
 
-			var aggregate = new CompetenciaAggregateRoot(_domainEventsFromHistory);
+			var sql = @"SELECT c.EntityId AS Id, c.DataCriacao, c.Mes FROM COMP.Competencia AS c
+						WHERE c.EntityId = @AggregateId";
 
-			aggregate.Create(competencia.EntityId, competencia.DataCriacao, new Ano(competencia.Ano), (Mes)competencia.Mes);
+			try
+			{
+				using (IDbConnection db = new SqlConnection("Data Source=10.0.75.1;Initial Catalog=GerenciamentoFinanceiro;User Id=SA;Password=GuiGui@2016;"))
+				{
+					aggregate = await db.QuerySingleAsync<CompetenciaAggregateRoot>(sql, new { @AggregateId = competenciaId });
+				}
+			}
+			catch (Exception e)
+			{
+				throw;
+			}
 
 			return aggregate;
 
