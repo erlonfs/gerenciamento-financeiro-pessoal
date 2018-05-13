@@ -5,17 +5,15 @@ using System.Threading.Tasks;
 
 namespace SharedKernel.Common
 {
-	public class DomainEvents : IDomainEvents
+	public class DomainEventsFromHistory : IDomainEvents
 	{
 		[ThreadStatic]
 		private static List<Delegate> actions;
 
-		public DomainEvents(Container container)
+		public DomainEventsFromHistory()
 		{
-			_container = container;
-		}
 
-		private Container _container { get; }
+		}
 
 		public void Register<T>(Action<T> callback) where T : IDomainEvent
 		{
@@ -28,16 +26,8 @@ namespace SharedKernel.Common
 			actions = null;
 		}
 
-		public async Task Raise<T>(T args, bool fromHistory = false) where T : IDomainEvent
+		public Task Raise<T>(T args) where T : IDomainEvent
 		{
-			foreach (var handler in _container.GetAllInstances<IHandler<T>>())
-			{
-				if (fromHistory) continue;
-
-				await handler.HandleAsync(args);
-
-			}
-
 			if (actions != null)
 			{
 				foreach (var action in actions)
@@ -45,6 +35,9 @@ namespace SharedKernel.Common
 					if (action is Action<T>) { ((Action<T>)action)(args); }
 				}
 			}
+
+			return Task.CompletedTask;
+
 		}
 	}
 }

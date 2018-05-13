@@ -10,6 +10,7 @@ namespace Competencia.Domain.CompetenciaAggregate
 	{
 		public Ano Ano { get; private set; }
 		public Mes Mes { get; private set; }
+		public DateTime DataCriacao { get; private set; }
 
 		public Decimal TotalContasAPagar { get; private set; }
 		public Decimal TotalContasAReceber { get; private set; }
@@ -101,13 +102,14 @@ namespace Competencia.Domain.CompetenciaAggregate
 			});
 		}
 
-		public CompetenciaAggregateRoot Create(Guid id, Ano ano, Mes mes)
+		public CompetenciaAggregateRoot Create(Guid id, DateTime dataCriacao, Ano ano, Mes mes)
 		{
 			Id = id;
+			DataCriacao = dataCriacao;
 			Ano = ano;
 			Mes = mes;
 
-			_domainEvents.Raise(new CompetenciaCriada(this));
+			_domainEvents.Raise(new CompetenciaCriada(Id, this));
 
 			return this;
 
@@ -118,7 +120,7 @@ namespace Competencia.Domain.CompetenciaAggregate
 			var existeReceita = _lancamentos.OfType<Receita>().Any(x => x.Id == receita.Id);
 			if (existeReceita) throw new Exception("Receita já adicionada!");
 
-			_domainEvents.Raise(new ReceitaAdicionada(receita));
+			_domainEvents.Raise(new ReceitaAdicionada(Id, receita));
 		}
 
 		public void AdicionarDespesa(Despesa despesa)
@@ -126,27 +128,27 @@ namespace Competencia.Domain.CompetenciaAggregate
 			var existeDespesa = _lancamentos.OfType<Despesa>().Any(x => x.Id == despesa.Id);
 			if (existeDespesa) throw new Exception("Despesa já adicionada!");
 
-			_domainEvents.Raise(new DespesaAdicionada(despesa));
+			_domainEvents.Raise(new DespesaAdicionada(Id, despesa));
 		}
 
 		public void AlterarReceita(Receita receita)
 		{
-			_domainEvents.Raise(new ReceitaAlterada(receita));
+			_domainEvents.Raise(new ReceitaAlterada(Id, receita));
 		}
 
 		public void AlterarDespesa(Despesa despesa)
 		{
-			_domainEvents.Raise(new DespesaAlterada(despesa));
+			_domainEvents.Raise(new DespesaAlterada(Id, despesa));
 		}
 
 		public void RemoverReceita(Receita receita)
 		{
-			_domainEvents.Raise(new ReceitaRemovida(receita));
+			_domainEvents.Raise(new ReceitaRemovida(Id, receita));
 		}
 
 		public void RemoverDespesa(Despesa despesa)
 		{
-			_domainEvents.Raise(new DespesaRemovida(despesa));
+			_domainEvents.Raise(new DespesaRemovida(Id, despesa));
 		}
 
 	}

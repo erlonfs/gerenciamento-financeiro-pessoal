@@ -1,6 +1,7 @@
 ﻿using Competencia.Data;
 using Competencia.Domain.CompetenciaAggregate;
 using SharedKernel.Common;
+using System.Threading.Tasks;
 
 namespace Competencia.Handlers
 {
@@ -13,7 +14,7 @@ namespace Competencia.Handlers
 			_context = context;
 		}
 
-		public void Handle(CompetenciaCriada e)
+		public Task HandleAsync(CompetenciaCriada e)
 		{
 			_context.Add(new Data.Model.Competencia
 			{
@@ -22,6 +23,9 @@ namespace Competencia.Handlers
 				DataCriacao = e.DataCriacao,
 				EntityId = e.Competencia.Id
 			});
+
+			return Task.CompletedTask;
+
 		}
 	}
 }

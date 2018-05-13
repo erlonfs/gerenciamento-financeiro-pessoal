@@ -1,7 +1,9 @@
-﻿namespace SharedKernel.Common
+﻿using System.Threading.Tasks;
+
+namespace SharedKernel.Common
 {
 	public interface IHandler<T> where T : IDomainEvent
 	{
-		void Handle(T e);
+		Task HandleAsync(T e);
 	}
 }
