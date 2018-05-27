@@ -1,6 +1,7 @@
 ﻿using Competencias.Api.Dtos;
 using Competencias.Domain;
 using Competencias.Domain.Aggregates;
+using Competencias.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Common;
@@ -45,7 +46,7 @@ namespace Competencias.Api.Controllers
 		public async Task AdicionarReceitaAsync(Guid id, LancamentoDto dto)
 		{
 			var competencia = await _context.Competencia.SingleOrDefaultAsync(x => x.EntityId == id);
-			if (competencia == null) throw new Exception("Competencia não encontrada.");
+			if (competencia == null) throw new CompetenciaNaoEncontradaException();
 
 			var receita = Receita.Create(Guid.NewGuid(), dto.CategoriaId, dto.Data, dto.Descricao,
 										dto.IsLancamentoPago, dto.Valor, dto.FormaDePagto, dto.Anotacao);
@@ -60,7 +61,7 @@ namespace Competencias.Api.Controllers
 		public async Task AdicionarDespesaAsync(Guid id, LancamentoDto dto)
 		{
 			var competencia = await _context.Competencia.SingleOrDefaultAsync(x => x.EntityId == id);
-			if (competencia == null) throw new Exception("Competencia não encontrada.");
+			if (competencia == null) throw new CompetenciaNaoEncontradaException();
 
 			var despesa = Despesa.Create(Guid.NewGuid(), dto.CategoriaId, dto.Data, dto.Descricao,
 										dto.IsLancamentoPago, dto.Valor, dto.FormaDePagto, dto.Anotacao);
