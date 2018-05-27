@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Competencia.Domain.Test
+namespace Competencias.Domain.Test
 {
 	public class DomainEventsFake
 	{

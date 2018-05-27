@@ -1,8 +1,6 @@
-﻿using Competencia.Data;
-using Competencia.Domain.CompetenciaAggregate;
-using Microsoft.EntityFrameworkCore;
+﻿using Competencias.Domain;
+using Competencias.Domain.Aggregates;
 using SharedKernel.Common;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Competencia.Handlers
@@ -16,9 +14,12 @@ namespace Competencia.Handlers
 			_context = context;
 		}
 
-		public async Task HandleAsync(ReceitaAdicionada e)
+		public Task HandleAsync(ReceitaAdicionada e)
 		{
-			var competencia = await _context.Competencia.SingleAsync(x => x.EntityId == e.AggregateId);
+			//var competencia = await _context.Competencia.SingleAsync(x => x.EntityId == e.AggregateId);
+
+			return Task.CompletedTask;
+
 		}
 	}
 }

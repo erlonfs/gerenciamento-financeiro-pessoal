@@ -1,15 +1,15 @@
 ﻿using System;
 using SharedKernel.Common;
 
-namespace Competencia.Domain.CompetenciaAggregate
+namespace Competencias.Domain.Aggregates
 {
 	public class CompetenciaCriada : IDomainEvent
 	{
 		public Guid AggregateId { get; }
-		public CompetenciaAggregateRoot Competencia { get; }
+		public Competencia Competencia { get; }
 		public DateTime DataCriacao { get; }
 
-		public CompetenciaCriada(Guid aggregateId, CompetenciaAggregateRoot competencia)
+		public CompetenciaCriada(Guid aggregateId, Competencia competencia)
 		{
 			AggregateId = aggregateId;
 			Competencia = competencia;

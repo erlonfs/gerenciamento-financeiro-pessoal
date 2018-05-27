@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace Competencia.Api.Controllers
+namespace Competencias.Api.Controllers
 {
 	public class ApiExceptionFilter : ExceptionFilterAttribute
 	{

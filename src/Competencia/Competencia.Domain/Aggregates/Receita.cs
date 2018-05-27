@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Competencia.Domain.CompetenciaAggregate
+namespace Competencias.Domain.Aggregates
 {
 	public sealed class Receita : Lancamento
 	{

@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Competencia.Domain.CompetenciaAggregate
+namespace Competencias.Domain.Aggregates
 {
-	public class CompetenciaAggregateRoot : Entity<Guid>
+	public class Competencia : Entity<Guid>
 	{
 		public Ano Ano { get; private set; }
 		public Mes Mes { get; private set; }
@@ -19,7 +19,7 @@ namespace Competencia.Domain.CompetenciaAggregate
 		private List<Lancamento> _lancamentos = new List<Lancamento>();
 		public IReadOnlyList<Lancamento> Lancamentos => _lancamentos.AsReadOnly();
 
-		public CompetenciaAggregateRoot()
+		public Competencia()
 		{
 			Register();
 		}
@@ -99,7 +99,7 @@ namespace Competencia.Domain.CompetenciaAggregate
 			});
 		}
 
-		public CompetenciaAggregateRoot Create(Guid id, DateTime dataCriacao, Ano ano, Mes mes)
+		public Competencia Create(Guid id, DateTime dataCriacao, Ano ano, Mes mes)
 		{
 			Id = id;
 			DataCriacao = dataCriacao;

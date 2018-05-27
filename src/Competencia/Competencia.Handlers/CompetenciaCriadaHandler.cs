@@ -1,9 +1,9 @@
-﻿using Competencia.Data;
-using Competencia.Domain.CompetenciaAggregate;
+﻿using Competencias.Domain;
+using Competencias.Domain.Aggregates;
 using SharedKernel.Common;
 using System.Threading.Tasks;
 
-namespace Competencia.Handlers
+namespace Competencias.Handlers
 {
 	public class CompetenciaCriadaHandler : IHandler<CompetenciaCriada>
 	{
@@ -16,12 +16,12 @@ namespace Competencia.Handlers
 
 		public Task HandleAsync(CompetenciaCriada e)
 		{
-			_context.Add(new Data.Model.Competencia
+			_context.Add(new Domain.Aggregates.Competencia
 			{
-				Mes = (int)e.Competencia.Mes,
-				Ano = e.Competencia.Ano.Numero,
-				DataCriacao = e.DataCriacao,
-				EntityId = e.Competencia.Id
+				//Mes = (int)e.Competencia.Mes,
+				//Ano = e.Competencia.Ano.Numero,
+				//DataCriacao = e.DataCriacao,
+				//EntityId = e.Competencia.Id
 			});
 
 			return Task.CompletedTask;

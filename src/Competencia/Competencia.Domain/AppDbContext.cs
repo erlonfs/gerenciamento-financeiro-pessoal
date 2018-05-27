@@ -1,13 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Competencias.Domain.Aggregates;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
-namespace Competencia.Data
+namespace Competencias.Domain
 {
 	public class AppDbContext : DbContext
 	{
-		public DbSet<Model.Competencia> Competencia { get; set; }
-		public DbSet<Model.Lancamento> Lancamento { get; set; }
+		public DbSet<Competencia> Competencia { get; set; }
+		public DbSet<Lancamento> Lancamento { get; set; }
 
 		public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
 		{
