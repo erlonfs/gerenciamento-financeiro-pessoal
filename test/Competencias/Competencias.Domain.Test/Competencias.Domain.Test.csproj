@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Competencia\Competencia.Domain\Competencias.Domain.csproj" />
+    <ProjectReference Include="..\..\..\src\Competencias\Competencias.Domain\Competencias.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

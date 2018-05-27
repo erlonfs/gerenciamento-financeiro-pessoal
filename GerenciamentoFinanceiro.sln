@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Competencias.Domain", "src\Competencia\Competencia.Domain\Competencias.Domain.csproj", "{DF9106E9-CB87-401C-BB8B-5682175F9B20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Competencias.Domain", "src\Competencias\Competencias.Domain\Competencias.Domain.csproj", "{DF9106E9-CB87-401C-BB8B-5682175F9B20}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedKernel.Common", "src\SharedKernel\SharedKernel.Common\SharedKernel.Common.csproj", "{E92DAEBD-FE17-409A-99DB-B679874CE418}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Competencias.Handlers", "src\Competencia\Competencia.Handlers\Competencias.Handlers.csproj", "{3DE9946D-24BB-492C-B3CD-B083F78775D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Competencias.Handlers", "src\Competencias\Competencias.Handlers\Competencias.Handlers.csproj", "{3DE9946D-24BB-492C-B3CD-B083F78775D9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Competencias.Api", "src\Competencia\Competencia.Api\Competencias.Api.csproj", "{37E322E0-42CD-4D8B-8667-8E98FD9F0150}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Competencias.Api", "src\Competencias\Competencias.Api\Competencias.Api.csproj", "{37E322E0-42CD-4D8B-8667-8E98FD9F0150}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{EA0E6969-B3FA-4D95-98D2-BE18D60A25DA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Competencias.Domain.Test", "test\Competencia\Competencia.Domain.Test\Competencias.Domain.Test.csproj", "{C320790D-7758-4DA1-8F4D-3B48D86BC366}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Competencias.Domain.Test", "test\Competencias\Competencias.Domain.Test\Competencias.Domain.Test.csproj", "{C320790D-7758-4DA1-8F4D-3B48D86BC366}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D05DEE7B-8ADF-4DA1-B7E7-201D98AC868C}"
 EndProject

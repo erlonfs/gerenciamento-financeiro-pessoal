@@ -16,7 +16,8 @@ namespace Competencia.Handlers
 
 		public Task HandleAsync(ReceitaAdicionada e)
 		{
-			//var competencia = await _context.Competencia.SingleAsync(x => x.EntityId == e.AggregateId);
+
+			//TODO
 
 			return Task.CompletedTask;
 
