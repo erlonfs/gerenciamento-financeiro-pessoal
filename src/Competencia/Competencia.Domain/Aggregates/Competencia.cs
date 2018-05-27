@@ -21,82 +21,7 @@ namespace Competencias.Domain.Aggregates
 
 		public Competencia()
 		{
-			Register();
-		}
 
-		private void Register()
-		{
-			DomainEvents.Register<ReceitaAdicionada>(e =>
-			{
-				_lancamentos.Add(e.Receita);
-
-				TotalContasAReceber += e.Receita;
-				Saldo += e.Receita;
-
-			});
-
-			DomainEvents.Register<DespesaAdicionada>(e =>
-			{
-				_lancamentos.Add(e.Despesa);
-
-				TotalContasAPagar += e.Despesa;
-				Saldo += e.Despesa;
-
-			});
-
-			DomainEvents.Register<ReceitaAlterada>(e =>
-			{
-				var receitaAlterar = _lancamentos.SingleOrDefault(x => x.Id == e.Receita.Id) as Receita;
-				if (receitaAlterar == null) return;
-
-				TotalContasAReceber -= receitaAlterar;
-				TotalContasAReceber += e.Receita;
-
-				Saldo -= receitaAlterar;
-				Saldo += e.Receita;
-
-				receitaAlterar = e.Receita;
-
-			});
-
-			DomainEvents.Register<DespesaAlterada>(e =>
-			{
-				var despesaAlterar = _lancamentos.SingleOrDefault(x => x.Id == e.Despesa.Id) as Despesa;
-				if (despesaAlterar == null) return;
-
-				TotalContasAPagar -= despesaAlterar;
-				TotalContasAPagar += e.Despesa;
-
-				Saldo -= despesaAlterar;
-				Saldo += e.Despesa;
-
-				despesaAlterar = e.Despesa;
-
-			});
-
-			DomainEvents.Register<ReceitaRemovida>(e =>
-			{
-				var receitaRemover = _lancamentos.SingleOrDefault(x => x.Id == e.Receita.Id) as Receita;
-				if (receitaRemover == null) return;
-
-				TotalContasAReceber -= receitaRemover;
-				Saldo -= receitaRemover;
-
-				_lancamentos.Remove(receitaRemover);
-
-			});
-
-			DomainEvents.Register<DespesaRemovida>(e =>
-			{
-				var despesaRemover = _lancamentos.SingleOrDefault(x => x.Id == e.Despesa.Id) as Despesa;
-				if (despesaRemover == null) return;
-
-				TotalContasAPagar -= despesaRemover;
-				Saldo -= despesaRemover;
-
-				_lancamentos.Remove(despesaRemover);
-
-			});
 		}
 
 		public Competencia Create(Guid id, DateTime dataCriacao, Ano ano, Mes mes)
@@ -117,6 +42,11 @@ namespace Competencias.Domain.Aggregates
 			var existeReceita = _lancamentos.OfType<Receita>().Any(x => x.Id == receita.Id);
 			if (existeReceita) throw new Exception("Receita já adicionada!");
 
+			TotalContasAReceber += receita;
+			Saldo += receita;
+
+			_lancamentos.Add(receita);
+
 			DomainEvents.Raise(new ReceitaAdicionada(Id, receita));
 		}
 
@@ -125,26 +55,65 @@ namespace Competencias.Domain.Aggregates
 			var existeDespesa = _lancamentos.OfType<Despesa>().Any(x => x.Id == despesa.Id);
 			if (existeDespesa) throw new Exception("Despesa já adicionada!");
 
+			TotalContasAPagar += despesa;
+			Saldo += despesa;
+
+			_lancamentos.Add(despesa);
+
 			DomainEvents.Raise(new DespesaAdicionada(Id, despesa));
 		}
 
 		public void AlterarReceita(Receita receita)
 		{
+			var receitaAlterar = _lancamentos.OfType<Receita>().SingleOrDefault(x => x.Id == receita.Id);
+
+			TotalContasAReceber -= receitaAlterar;
+			Saldo -= receitaAlterar;
+
+			TotalContasAReceber += receita;
+			Saldo += receita;
+
+			receitaAlterar = receita;
+
 			DomainEvents.Raise(new ReceitaAlterada(Id, receita));
 		}
 
 		public void AlterarDespesa(Despesa despesa)
 		{
+			var despesaAlterar = _lancamentos.OfType<Despesa>().SingleOrDefault(x => x.Id == despesa.Id);
+
+			TotalContasAPagar -= despesaAlterar;
+			Saldo -= despesaAlterar;
+
+			TotalContasAPagar += despesa;
+			Saldo += despesa;
+
+			despesaAlterar = despesa;
+
 			DomainEvents.Raise(new DespesaAlterada(Id, despesa));
 		}
 
 		public void RemoverReceita(Receita receita)
 		{
+			var receitaRemover = _lancamentos.OfType<Receita>().SingleOrDefault(x => x.Id == receita.Id);
+
+			TotalContasAReceber -= receitaRemover;
+			Saldo -= receitaRemover;
+
+			_lancamentos.Remove(receitaRemover);
+
 			DomainEvents.Raise(new ReceitaRemovida(Id, receita));
 		}
 
 		public void RemoverDespesa(Despesa despesa)
 		{
+			var despesaRemover = _lancamentos.OfType<Despesa>().SingleOrDefault(x => x.Id == despesa.Id);
+
+			TotalContasAPagar -= despesaRemover;
+			Saldo -= despesaRemover;
+
+			_lancamentos.Remove(despesa);
+
 			DomainEvents.Raise(new DespesaRemovida(Id, despesa));
 		}
 
