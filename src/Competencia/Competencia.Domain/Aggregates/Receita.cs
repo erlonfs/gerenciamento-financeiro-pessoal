@@ -1,11 +1,9 @@
 ﻿using System;
 
-namespace Competencia.Domain.CompetenciaAggregate
+namespace Competencias.Domain.Aggregates
 {
 	public sealed class Receita : Lancamento
 	{
-		public override LancamentoTipo Tipo => LancamentoTipo.Receita;
-
 		private Receita(Guid id) : base(id) { }
 
 		public static Receita Create(Guid id, int categoriaId, DateTime data, string descricao,
@@ -16,12 +14,15 @@ namespace Competencia.Domain.CompetenciaAggregate
 
 			return new Receita(id)
 			{
+				TipoId = (int)LancamentoTipo.Receita,
+				Tipo = LancamentoTipo.Receita.ToString(),
+				DataCriacao = DateTime.Now,
 				CategoriaId = categoriaId,
 				Data = data,
 				Descricao = descricao,
 				IsLancamentoPago = isLancamentoPago,
 				Valor = valor,
-				FormaDePagto = formaDePagto,
+				FormaDePagtoId = (int)formaDePagto,
 				Anotacao = anotacao
 			};
 		}

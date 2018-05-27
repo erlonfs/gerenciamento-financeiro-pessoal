@@ -3,25 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Competencia.Domain", "src\Competencia\Competencia.Domain\Competencia.Domain.csproj", "{DF9106E9-CB87-401C-BB8B-5682175F9B20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Competencias.Domain", "src\Competencia\Competencia.Domain\Competencias.Domain.csproj", "{DF9106E9-CB87-401C-BB8B-5682175F9B20}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedKernel.Common", "src\SharedKernel\SharedKernel.Common\SharedKernel.Common.csproj", "{E92DAEBD-FE17-409A-99DB-B679874CE418}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Competencia.Data", "src\Competencia\Competencia.Data\Competencia.Data.csproj", "{19408C11-70B8-440A-BC97-AB6AD65AAF74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Competencias.Handlers", "src\Competencia\Competencia.Handlers\Competencias.Handlers.csproj", "{3DE9946D-24BB-492C-B3CD-B083F78775D9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Competencia.Handlers", "src\Competencia\Competencia.Handlers\Competencia.Handlers.csproj", "{3DE9946D-24BB-492C-B3CD-B083F78775D9}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Competencia.Api", "src\Competencia\Competencia.Api\Competencia.Api.csproj", "{37E322E0-42CD-4D8B-8667-8E98FD9F0150}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Competencias.Api", "src\Competencia\Competencia.Api\Competencias.Api.csproj", "{37E322E0-42CD-4D8B-8667-8E98FD9F0150}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{EA0E6969-B3FA-4D95-98D2-BE18D60A25DA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Competencia.Domain.Test", "test\Competencia\Competencia.Domain.Test\Competencia.Domain.Test.csproj", "{C320790D-7758-4DA1-8F4D-3B48D86BC366}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Competencias.Domain.Test", "test\Competencia\Competencia.Domain.Test\Competencias.Domain.Test.csproj", "{C320790D-7758-4DA1-8F4D-3B48D86BC366}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D05DEE7B-8ADF-4DA1-B7E7-201D98AC868C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Competencia", "Competencia", "{C9550C27-61F0-4366-81DA-FB05348AA81A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Competencias", "Competencias", "{C9550C27-61F0-4366-81DA-FB05348AA81A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Competencia", "Competencia", "{0CCE6784-CDCC-40C3-A2C8-481144169C86}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Competencias", "Competencias", "{0CCE6784-CDCC-40C3-A2C8-481144169C86}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedKernel", "SharedKernel", "{94E7C430-6D1C-4769-AE64-15D42461DC2C}"
 EndProject
@@ -47,10 +45,6 @@ Global
 		{E92DAEBD-FE17-409A-99DB-B679874CE418}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E92DAEBD-FE17-409A-99DB-B679874CE418}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E92DAEBD-FE17-409A-99DB-B679874CE418}.Release|Any CPU.Build.0 = Release|Any CPU
-		{19408C11-70B8-440A-BC97-AB6AD65AAF74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{19408C11-70B8-440A-BC97-AB6AD65AAF74}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{19408C11-70B8-440A-BC97-AB6AD65AAF74}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{19408C11-70B8-440A-BC97-AB6AD65AAF74}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3DE9946D-24BB-492C-B3CD-B083F78775D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3DE9946D-24BB-492C-B3CD-B083F78775D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DE9946D-24BB-492C-B3CD-B083F78775D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -70,7 +64,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{DF9106E9-CB87-401C-BB8B-5682175F9B20} = {0CCE6784-CDCC-40C3-A2C8-481144169C86}
 		{E92DAEBD-FE17-409A-99DB-B679874CE418} = {94E7C430-6D1C-4769-AE64-15D42461DC2C}
-		{19408C11-70B8-440A-BC97-AB6AD65AAF74} = {0CCE6784-CDCC-40C3-A2C8-481144169C86}
 		{3DE9946D-24BB-492C-B3CD-B083F78775D9} = {0CCE6784-CDCC-40C3-A2C8-481144169C86}
 		{37E322E0-42CD-4D8B-8667-8E98FD9F0150} = {0CCE6784-CDCC-40C3-A2C8-481144169C86}
 		{C320790D-7758-4DA1-8F4D-3B48D86BC366} = {C9550C27-61F0-4366-81DA-FB05348AA81A}

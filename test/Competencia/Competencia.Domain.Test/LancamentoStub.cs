@@ -1,7 +1,7 @@
-﻿using Competencia.Domain.CompetenciaAggregate;
+﻿using Competencias.Domain.Aggregates;
 using System;
 
-namespace Competencia.Domain.Test
+namespace Competencias.Domain.Test
 {
 	public class LancamentoStub
 	{

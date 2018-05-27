@@ -1,9 +1,9 @@
-﻿using Competencia.Data;
+﻿using Competencias.Domain;
 using SharedKernel.Common;
 using System;
 using System.Threading.Tasks;
 
-namespace Competencia.Api
+namespace Competencias.Api
 {
 	public class UnitOfWork : IUnitOfWork
 	{

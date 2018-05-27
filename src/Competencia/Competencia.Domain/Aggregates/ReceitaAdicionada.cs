@@ -1,7 +1,7 @@
 ﻿using System;
 using SharedKernel.Common;
 
-namespace Competencia.Domain.CompetenciaAggregate
+namespace Competencias.Domain.Aggregates
 {
 	public class ReceitaAdicionada : IDomainEvent
 	{

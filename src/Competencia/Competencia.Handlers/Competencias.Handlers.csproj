@@ -6,8 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\SharedKernel\SharedKernel.Common\SharedKernel.Common.csproj" />
-    <ProjectReference Include="..\Competencia.Data\Competencia.Data.csproj" />
-    <ProjectReference Include="..\Competencia.Domain\Competencia.Domain.csproj" />
+    <ProjectReference Include="..\Competencia.Domain\Competencias.Domain.csproj" />
   </ItemGroup>
 
 </Project>

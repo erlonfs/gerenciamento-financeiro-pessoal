@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
+using System;
 
-namespace Competencia.Api.Controllers
+namespace Competencias.Api.Controllers
 {
 	public class ApiExceptionFilter : ExceptionFilterAttribute
 	{
@@ -8,7 +9,7 @@ namespace Competencia.Api.Controllers
 		{
 			if(context.Exception != null)
 			{
-
+				throw new Exception(context.Exception.Message, context.Exception.InnerException);
 			}
 		}
 	}

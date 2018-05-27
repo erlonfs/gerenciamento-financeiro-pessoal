@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <ApplicationIcon />
     <Win32Resource />
+    <AssemblyName>Competencias.Api</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,9 +26,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\SharedKernel\SharedKernel.Common\SharedKernel.Common.csproj" />
-    <ProjectReference Include="..\Competencia.Data\Competencia.Data.csproj" />
-    <ProjectReference Include="..\Competencia.Domain\Competencia.Domain.csproj" />
-    <ProjectReference Include="..\Competencia.Handlers\Competencia.Handlers.csproj" />
+    <ProjectReference Include="..\Competencia.Domain\Competencias.Domain.csproj" />
+    <ProjectReference Include="..\Competencia.Handlers\Competencias.Handlers.csproj" />
   </ItemGroup>
 
 </Project>

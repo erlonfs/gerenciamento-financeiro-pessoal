@@ -1,11 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Competencias.Domain.Aggregates;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Competencia.Data.Mapping
+namespace Competencias.Domain.Mapping
 {
-	public class LancamentoMap : IEntityTypeConfiguration<Model.Lancamento>
+	public class LancamentoMap : IEntityTypeConfiguration<Lancamento>
 	{
-		public void Configure(EntityTypeBuilder<Model.Lancamento> builder)
+		public void Configure(EntityTypeBuilder<Lancamento> builder)
 		{
 			builder.ToTable("Lancamento", "COMP");
 
@@ -21,7 +25,9 @@ namespace Competencia.Data.Mapping
 			builder.Property(x => x.FormaDePagtoId);
 			builder.Property(x => x.Anotacao);
 
-			builder.HasOne(x => x.Competencia);
+			builder.HasDiscriminator(x => x.Tipo);
+
+
 		}
 	}
 }

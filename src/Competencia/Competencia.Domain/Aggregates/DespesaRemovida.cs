@@ -1,15 +1,15 @@
 ﻿using System;
 using SharedKernel.Common;
 
-namespace Competencia.Domain.CompetenciaAggregate
+namespace Competencias.Domain.Aggregates
 {
-	public class DespesaAlterada : IDomainEvent
+	public class DespesaRemovida : IDomainEvent
 	{
 		public Guid AggregateId { get; }
 		public Despesa Despesa { get; }
 		public DateTime DataCriacao { get; }
 
-		public DespesaAlterada(Guid aggregateId, Despesa despesa)
+		public DespesaRemovida(Guid aggregateId, Despesa despesa)
 		{
 			AggregateId = aggregateId;
 			Despesa = despesa;

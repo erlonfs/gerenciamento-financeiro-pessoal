@@ -1,7 +1,7 @@
-﻿using Competencia.Domain.CompetenciaAggregate;
+﻿using Competencias.Domain.Aggregates;
 using System;
 
-namespace Competencia.Api.Dtos
+namespace Competencias.Api.Dtos
 {
 	public class LancamentoDto
 	{

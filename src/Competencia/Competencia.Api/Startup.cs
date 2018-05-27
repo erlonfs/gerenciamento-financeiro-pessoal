@@ -1,9 +1,6 @@
-﻿using Competencia.Api;
-using Competencia.Data;
-using Competencia.Data.Services;
-using Competencia.Domain.CompetenciaAggregate;
-using Competencia.Domain.Services;
-using Competencia.Handlers;
+﻿using Competencias.Api;
+using Competencias.Domain;
+using Competencias.Handlers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -78,7 +75,6 @@ public class Startup
 		container.RegisterMvcViewComponents(app);
 
 		container.Register<IUnitOfWork, UnitOfWork>(Lifestyle.Scoped);
-		container.Register<ICompetenciaService, CompetenciaService>(Lifestyle.Scoped);
 
 		var assemblies = new[] { typeof(CompetenciaCriadaHandler).Assembly };
 		container.RegisterCollection(typeof(IHandler<>), assemblies);
