@@ -22,13 +22,13 @@ namespace Competencias.Domain.Test
 			var receita = Receita.Create(_id, _categoriaId, _data, _descricao, _isLancamentoPago, _valor,
 										   _formaDePagto, _anotacao);
 
-			receita.Tipo.Should().Be(LancamentoTipo.Receita);
+			receita.TipoId.Should().Be((int)LancamentoTipo.Receita);
 			receita.CategoriaId.Should().Be(_categoriaId);
 			receita.Data.Should().Be(_data);
 			receita.Descricao.Should().Be(_descricao);
 			receita.IsLancamentoPago.Should().Be(_isLancamentoPago);
 			receita.Valor.Should().Be(_valor);
-			receita.FormaDePagto.Should().Be(_formaDePagto);
+			receita.FormaDePagtoId.Should().Be((int)_formaDePagto);
 			receita.Anotacao.Should().Be(_anotacao);
 		}
 
@@ -38,13 +38,13 @@ namespace Competencias.Domain.Test
 			var despesa = Despesa.Create(_id, _categoriaId, _data, _descricao, _isLancamentoPago, _valor,
 										   _formaDePagto, _anotacao);
 
-			despesa.Tipo.Should().Be(LancamentoTipo.Despesa);
+			despesa.TipoId.Should().Be((int)LancamentoTipo.Despesa);
 			despesa.CategoriaId.Should().Be(_categoriaId);
 			despesa.Data.Should().Be(_data);
 			despesa.Descricao.Should().Be(_descricao);
 			despesa.IsLancamentoPago.Should().Be(_isLancamentoPago);
 			despesa.Valor.Should().Be(_valor);
-			despesa.FormaDePagto.Should().Be(_formaDePagto);
+			despesa.FormaDePagtoId.Should().Be((int)_formaDePagto);
 			despesa.Anotacao.Should().Be(_anotacao);
 		}
 

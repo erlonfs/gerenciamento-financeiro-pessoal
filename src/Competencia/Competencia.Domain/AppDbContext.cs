@@ -8,6 +8,8 @@ namespace Competencias.Domain
 	public class AppDbContext : DbContext
 	{
 		public DbSet<Competencia> Competencia { get; set; }
+		public DbSet<Receita> Receita { get; set; }
+		public DbSet<Despesa> Despesa { get; set; }
 		public DbSet<Lancamento> Lancamento { get; set; }
 
 		public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -22,7 +24,7 @@ namespace Competencias.Domain
 		private void AddMappingsDynamically(ModelBuilder modelBuilder)
 		{
 			var currentAssembly = typeof(AppDbContext).Assembly;
-			var mappings = currentAssembly.GetTypes().Where(t => t.FullName.StartsWith("Competencia.Data.Mapping.") && t.FullName.EndsWith("Map"));
+			var mappings = currentAssembly.GetTypes().Where(t => t.FullName.StartsWith("Competencias.Domain.Mapping.") && t.FullName.EndsWith("Map"));
 
 			foreach (var map in mappings.Select(Activator.CreateInstance))
 			{

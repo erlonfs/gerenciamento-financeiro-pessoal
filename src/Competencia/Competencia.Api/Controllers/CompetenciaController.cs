@@ -1,7 +1,12 @@
 ﻿using Competencias.Api.Dtos;
+using Competencias.Domain;
+using Competencias.Domain.Aggregates;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SharedKernel.Common;
+using SharedKernel.Common.ValueObjects;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Competencias.Api.Controllers
@@ -11,38 +16,58 @@ namespace Competencias.Api.Controllers
 	public class CompetenciaController : BaseApiController
 	{
 		private readonly IUnitOfWork _unitOfWork;
+		private AppDbContext _context;
 
-		public CompetenciaController(IUnitOfWork unitOfWork)
+		public CompetenciaController(IUnitOfWork unitOfWork, AppDbContext context)
 		{
 			_unitOfWork = unitOfWork;
+			_context = context;
 		}
 
 		[HttpPost]
 		[Route("")]
 		public async Task<Guid> CriarAsync(CompetenciaDto dto)
 		{
-			//var competencia = await _competenciaService.CriarAsync(dto.Ano, dto.Mes);
+			var id = Guid.NewGuid();
 
-			await _unitOfWork.CommitAsync();
+			var competencia = new Domain.Aggregates.Competencia().Create(id, DateTime.Now, new Ano(dto.Ano), (Mes)dto.Mes);
 
-			//return competencia.Id;
+			_context.Competencia.Add(competencia);
 
-			return Guid.NewGuid();
+			await _context.SaveChangesAsync();
+
+			return competencia.EntityId;
+
 		}
 
 		[HttpPost]
 		[Route("{id:guid}/adicionar-receita")]
 		public async Task AdicionarReceitaAsync(Guid id, LancamentoDto dto)
 		{
-			//var competencia = await _competenciaService.ObterPorIdAsync(id);
-			//if (competencia == null) throw new Exception("Competencia não encontrada.");
+			var competencia = await _context.Competencia.SingleOrDefaultAsync(x => x.EntityId == id);
+			if (competencia == null) throw new Exception("Competencia não encontrada.");
 
-			//var receita = Receita.Create(Guid.NewGuid(), dto.CategoriaId, dto.Data, dto.Descricao,
-			//							dto.IsLancamentoPago, dto.Valor, dto.FormaDePagto, dto.Anotacao);
+			var receita = Receita.Create(Guid.NewGuid(), dto.CategoriaId, dto.Data, dto.Descricao,
+										dto.IsLancamentoPago, dto.Valor, dto.FormaDePagto, dto.Anotacao);
 
-			//competencia.AdicionarReceita(receita);
+			competencia.AdicionarReceita(receita);
 
-			await _unitOfWork.CommitAsync();
+			await _context.SaveChangesAsync();
+		}
+
+		[HttpPost]
+		[Route("{id:guid}/adicionar-despesa")]
+		public async Task AdicionarDespesaAsync(Guid id, LancamentoDto dto)
+		{
+			var competencia = await _context.Competencia.SingleOrDefaultAsync(x => x.EntityId == id);
+			if (competencia == null) throw new Exception("Competencia não encontrada.");
+
+			var despesa = Despesa.Create(Guid.NewGuid(), dto.CategoriaId, dto.Data, dto.Descricao,
+										dto.IsLancamentoPago, dto.Valor, dto.FormaDePagto, dto.Anotacao);
+
+			competencia.AdicionarDespesa(despesa);
+
+			await _context.SaveChangesAsync();
 		}
 
 	}

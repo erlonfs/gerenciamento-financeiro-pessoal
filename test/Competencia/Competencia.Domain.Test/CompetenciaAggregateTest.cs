@@ -33,7 +33,7 @@ namespace Competencias.Domain.Test
 		{
 			var competencia = _aggregate.Create(_competenciaId, _dataCriacao, _ano, _mes);
 
-			competencia.Id.Should().Be(_competenciaId);
+			competencia.EntityId.Should().Be(_competenciaId);
 			competencia.Ano.Should().Be(_ano);
 			competencia.Mes.Should().Be(_mes);
 		}
@@ -75,10 +75,10 @@ namespace Competencias.Domain.Test
 			competencia.RemoverReceita(receitaARemover);
 
 			competencia.AdicionarReceita(receitaAlterar);
-			competencia.AlterarReceita(LancamentoStub.CreateReceitaComValor(receitaAlterar.Id, 90));
+			competencia.AlterarReceita(LancamentoStub.CreateReceitaComValor(receitaAlterar.EntityId, 90));
 
 			competencia.AdicionarDespesa(despesaAlterar);
-			competencia.AlterarDespesa(LancamentoStub.CreateDespesaComValor(despesaAlterar.Id, 90));
+			competencia.AlterarDespesa(LancamentoStub.CreateDespesaComValor(despesaAlterar.EntityId, 90));
 
 			competencia.Saldo.Should().Be(10M);
 			competencia.TotalContasAPagar.Should().Be(-90M);

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>Competencias.Domain</AssemblyName>
-    <RootNamespace>Competencia.Domain</RootNamespace>
+    <RootNamespace>Competencias.Domain</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

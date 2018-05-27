@@ -8,6 +8,7 @@ namespace Competencias.Domain.Aggregates
 {
 	public class Competencia : Entity<Guid>
 	{
+		public int Id { get; private set; }
 		public Ano Ano { get; private set; }
 		public Mes Mes { get; private set; }
 		public DateTime DataCriacao { get; private set; }
@@ -26,12 +27,12 @@ namespace Competencias.Domain.Aggregates
 
 		public Competencia Create(Guid id, DateTime dataCriacao, Ano ano, Mes mes)
 		{
-			Id = id;
+			EntityId = id;
 			DataCriacao = dataCriacao;
 			Ano = ano;
 			Mes = mes;
 
-			DomainEvents.Raise(new CompetenciaCriada(Id, this));
+			DomainEvents.Raise(new CompetenciaCriada(EntityId, this));
 
 			return this;
 
@@ -39,7 +40,7 @@ namespace Competencias.Domain.Aggregates
 
 		public void AdicionarReceita(Receita receita)
 		{
-			var existeReceita = _lancamentos.OfType<Receita>().Any(x => x.Id == receita.Id);
+			var existeReceita = _lancamentos.OfType<Receita>().Any(x => x.EntityId == receita.EntityId);
 			if (existeReceita) throw new Exception("Receita já adicionada!");
 
 			TotalContasAReceber += receita;
@@ -47,12 +48,12 @@ namespace Competencias.Domain.Aggregates
 
 			_lancamentos.Add(receita);
 
-			DomainEvents.Raise(new ReceitaAdicionada(Id, receita));
+			DomainEvents.Raise(new ReceitaAdicionada(EntityId, receita));
 		}
 
 		public void AdicionarDespesa(Despesa despesa)
 		{
-			var existeDespesa = _lancamentos.OfType<Despesa>().Any(x => x.Id == despesa.Id);
+			var existeDespesa = _lancamentos.OfType<Despesa>().Any(x => x.EntityId == despesa.EntityId);
 			if (existeDespesa) throw new Exception("Despesa já adicionada!");
 
 			TotalContasAPagar += despesa;
@@ -60,12 +61,12 @@ namespace Competencias.Domain.Aggregates
 
 			_lancamentos.Add(despesa);
 
-			DomainEvents.Raise(new DespesaAdicionada(Id, despesa));
+			DomainEvents.Raise(new DespesaAdicionada(EntityId, despesa));
 		}
 
 		public void AlterarReceita(Receita receita)
 		{
-			var receitaAlterar = _lancamentos.OfType<Receita>().SingleOrDefault(x => x.Id == receita.Id);
+			var receitaAlterar = _lancamentos.OfType<Receita>().SingleOrDefault(x => x.EntityId == receita.EntityId);
 
 			TotalContasAReceber -= receitaAlterar;
 			Saldo -= receitaAlterar;
@@ -75,12 +76,12 @@ namespace Competencias.Domain.Aggregates
 
 			receitaAlterar = receita;
 
-			DomainEvents.Raise(new ReceitaAlterada(Id, receita));
+			DomainEvents.Raise(new ReceitaAlterada(EntityId, receita));
 		}
 
 		public void AlterarDespesa(Despesa despesa)
 		{
-			var despesaAlterar = _lancamentos.OfType<Despesa>().SingleOrDefault(x => x.Id == despesa.Id);
+			var despesaAlterar = _lancamentos.OfType<Despesa>().SingleOrDefault(x => x.EntityId == despesa.EntityId);
 
 			TotalContasAPagar -= despesaAlterar;
 			Saldo -= despesaAlterar;
@@ -90,31 +91,31 @@ namespace Competencias.Domain.Aggregates
 
 			despesaAlterar = despesa;
 
-			DomainEvents.Raise(new DespesaAlterada(Id, despesa));
+			DomainEvents.Raise(new DespesaAlterada(EntityId, despesa));
 		}
 
 		public void RemoverReceita(Receita receita)
 		{
-			var receitaRemover = _lancamentos.OfType<Receita>().SingleOrDefault(x => x.Id == receita.Id);
+			var receitaRemover = _lancamentos.OfType<Receita>().SingleOrDefault(x => x.EntityId == receita.EntityId);
 
 			TotalContasAReceber -= receitaRemover;
 			Saldo -= receitaRemover;
 
 			_lancamentos.Remove(receitaRemover);
 
-			DomainEvents.Raise(new ReceitaRemovida(Id, receita));
+			DomainEvents.Raise(new ReceitaRemovida(EntityId, receita));
 		}
 
 		public void RemoverDespesa(Despesa despesa)
 		{
-			var despesaRemover = _lancamentos.OfType<Despesa>().SingleOrDefault(x => x.Id == despesa.Id);
+			var despesaRemover = _lancamentos.OfType<Despesa>().SingleOrDefault(x => x.EntityId == despesa.EntityId);
 
 			TotalContasAPagar -= despesaRemover;
 			Saldo -= despesaRemover;
 
 			_lancamentos.Remove(despesa);
 
-			DomainEvents.Raise(new DespesaRemovida(Id, despesa));
+			DomainEvents.Raise(new DespesaRemovida(EntityId, despesa));
 		}
 
 	}

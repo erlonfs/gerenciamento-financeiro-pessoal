@@ -4,16 +4,16 @@ namespace SharedKernel.Common
 {
 	public abstract class Entity<TId> : IEquatable<Entity<TId>>
 	{
-		private TId _id;
+		private TId _entityId;
 
-		protected Entity(TId id)
+		protected Entity(TId entityId)
 		{
-			if (Equals(id, default(TId)))
+			if (Equals(entityId, default(TId)))
 			{
 				throw new ArgumentException("The ID cannot be the default value.", "id");
 			}
 
-			_id = id;
+			_entityId = entityId;
 		}
 
 		protected Entity()
@@ -21,10 +21,10 @@ namespace SharedKernel.Common
 
 		}
 
-		public TId Id
+		public TId EntityId
 		{
-			get { return _id; }
-			set { _id = value; }
+			get { return _entityId; }
+			set { _entityId = value; }
 		}
 
 		public override bool Equals(object obj)
@@ -39,7 +39,7 @@ namespace SharedKernel.Common
 
 		public override int GetHashCode()
 		{
-			return Id.GetHashCode();
+			return EntityId.GetHashCode();
 		}
 
 		public bool Equals(Entity<TId> other)
@@ -48,7 +48,7 @@ namespace SharedKernel.Common
 			{
 				return false;
 			}
-			return Id.Equals(other.Id);
+			return EntityId.Equals(other.EntityId);
 		}
 	}
 }

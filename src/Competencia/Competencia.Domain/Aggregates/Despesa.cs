@@ -4,8 +4,6 @@ namespace Competencias.Domain.Aggregates
 {
 	public sealed class Despesa : Lancamento
 	{
-		public override LancamentoTipo Tipo => LancamentoTipo.Despesa;
-
 		private Despesa(Guid id) : base(id) { }
 
 		public static Despesa Create(Guid id, int categoriaId, DateTime data, string descricao, bool isLancamentoPago, decimal valor, FormaDePagamento formaDePagto, string anotacao)
@@ -14,12 +12,15 @@ namespace Competencias.Domain.Aggregates
 
 			return new Despesa(id)
 			{
+				TipoId = (int)LancamentoTipo.Despesa,
+				Tipo = LancamentoTipo.Despesa.ToString(),
+				DataCriacao = DateTime.Now,
 				CategoriaId = categoriaId,
 				Data = data,
 				Descricao = descricao,
 				IsLancamentoPago = isLancamentoPago,
 				Valor = valor,
-				FormaDePagto = formaDePagto,
+				FormaDePagtoId = (int)formaDePagto,
 				Anotacao = anotacao
 			};
 		}

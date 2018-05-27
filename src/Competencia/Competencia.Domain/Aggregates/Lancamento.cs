@@ -7,13 +7,17 @@ namespace Competencias.Domain.Aggregates
 	{
 		protected Lancamento(Guid id) : base(id) { }
 
-		public virtual LancamentoTipo Tipo { get; protected set; }
+		public int Id { get; protected set; }
+		public DateTime DataCriacao { get; protected set; }
+
+		public string Tipo { get; protected set; }
+		public int TipoId { get; protected set; }
 		public int CategoriaId { get; protected set; }
 		public DateTime Data { get; protected set; }
 		public string Descricao { get; protected set; }
 		public bool IsLancamentoPago { get; protected set; }
 		public decimal Valor { get; protected set; }
-		public FormaDePagamento FormaDePagto { get; protected set; }
+		public int FormaDePagtoId { get; protected set; }
 		public string Anotacao { get; protected set; }
 	}
 }
