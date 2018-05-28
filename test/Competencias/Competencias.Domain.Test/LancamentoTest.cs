@@ -60,12 +60,156 @@ namespace Competencias.Domain.Test
 
 		}
 
+		[Fact]
+		public void Nao_pode_criar_receita_com_id_invalido()
+		{
+			Action act = () => Receita.Create(Guid.Empty, _categoriaId, _data, _descricao, _isLancamentoPago, _valor,
+							  _formaDePagto, _anotacao);
+
+			Assert.Throws<ArgumentNullException>(act).ParamName.Should().Be("id"); ;
+
+		}
+
+		[InlineData(0001, 01, 01)]
+		[Theory]
+		public void Nao_pode_criar_receita_com_data_invalida(int ano, int mes, int dia)
+		{
+			Action act = () => Receita.Create(_id, _categoriaId, new DateTime(ano, mes, dia), _descricao, _isLancamentoPago, _valor,
+							  _formaDePagto, _anotacao);
+
+			Assert.Throws<ArgumentOutOfRangeException>(act).ParamName.Should().Be("data"); ;
+
+		}
+
+		[InlineData(null)]
+		[InlineData("")]
+		[InlineData(" ")]
+		[Theory]
+		public void Nao_pode_criar_receita_com_descricao_invalida(string descricao)
+		{
+			Action act = () => Receita.Create(_id, _categoriaId, _data, descricao, _isLancamentoPago, _valor,
+							  _formaDePagto, _anotacao);
+
+			Assert.Throws<ArgumentNullException>(act).ParamName.Should().Be("descricao"); ;
+
+		}
+
+		[InlineData(-5)]
+		[InlineData(-0.60)]
+		[Theory]
+		public void Nao_pode_criar_receita_com_valor_negativo(decimal valor)
+		{
+			Action act = () => Receita.Create(_id, _categoriaId, _data, _descricao, _isLancamentoPago, valor,
+							  _formaDePagto, _anotacao);
+
+			Assert.Throws<ArgumentOutOfRangeException>(act).ParamName.Should().Be("valor"); ;
+
+		}
+
+		[InlineData(-1)]
+		[InlineData(0)]
+		[InlineData(5)]
+		[Theory]
+		public void Nao_pode_criar_receita_com_formaDePagto_invalido(int formaDePagtoId)
+		{
+			Action act = () => Receita.Create(_id, _categoriaId, _data, _descricao, _isLancamentoPago, _valor,
+							  (FormaDePagamento)formaDePagtoId, _anotacao);
+
+			Assert.Throws<ArgumentOutOfRangeException>(act).ParamName.Should().Be("formaDePagto"); ;
+
+		}
+
+		[InlineData(null)]
+		[InlineData("")]
+		[InlineData(" ")]
+		[Theory]
+		public void Nao_pode_criar_receita_com_anotacao_invalida(string anotacao)
+		{
+			Action act = () => Receita.Create(_id, _categoriaId, _data, _descricao, _isLancamentoPago, _valor,
+							  _formaDePagto, anotacao);
+
+			Assert.Throws<ArgumentNullException>(act).ParamName.Should().Be("anotacao"); ;
+
+		}
+
+		[Fact]
+		public void Nao_pode_criar_despesa_com_id_invalido()
+		{
+			Action act = () => Despesa.Create(Guid.Empty, _categoriaId, _data, _descricao, _isLancamentoPago, _valor,
+							  _formaDePagto, _anotacao);
+
+			Assert.Throws<ArgumentNullException>(act).ParamName.Should().Be("id"); ;
+
+		}
+
+		[InlineData(0001, 01, 01)]
+		[Theory]
+		public void Nao_pode_criar_despesa_com_data_invalida(int ano, int mes, int dia)
+		{
+			Action act = () => Despesa.Create(_id, _categoriaId, new DateTime(ano, mes, dia), _descricao, _isLancamentoPago, _valor,
+							  _formaDePagto, _anotacao);
+
+			Assert.Throws<ArgumentOutOfRangeException>(act).ParamName.Should().Be("data"); ;
+
+		}
+
+		[InlineData(null)]
+		[InlineData("")]
+		[InlineData(" ")]
+		[Theory]
+		public void Nao_pode_criar_despesa_com_descricao_invalida(string descricao)
+		{
+			Action act = () => Despesa.Create(_id, _categoriaId, _data, descricao, _isLancamentoPago, _valor,
+							  _formaDePagto, _anotacao);
+
+			Assert.Throws<ArgumentNullException>(act).ParamName.Should().Be("descricao"); ;
+
+		}
+
+		[InlineData(-5)]
+		[InlineData(-0.60)]
+		[Theory]
+		public void Nao_pode_criar_despesa_com_valor_negativo(decimal valor)
+		{
+			Action act = () => Despesa.Create(_id, _categoriaId, _data, _descricao, _isLancamentoPago, valor,
+							  _formaDePagto, _anotacao);
+
+			Assert.Throws<ArgumentOutOfRangeException>(act).ParamName.Should().Be("valor"); ;
+
+		}
+
+		[InlineData(-1)]
+		[InlineData(0)]
+		[InlineData(5)]
+		[Theory]
+		public void Nao_pode_criar_despesa_com_formaDePagto_invalido(int formaDePagtoId)
+		{
+			Action act = () => Despesa.Create(_id, _categoriaId, _data, _descricao, _isLancamentoPago, _valor,
+							  (FormaDePagamento)formaDePagtoId, _anotacao);
+
+			Assert.Throws<ArgumentOutOfRangeException>(act).ParamName.Should().Be("formaDePagto"); ;
+
+		}
+
+		[InlineData(null)]
+		[InlineData("")]
+		[InlineData(" ")]
+		[Theory]
+		public void Nao_pode_criar_despesa_com_anotacao_invalida(string anotacao)
+		{
+			Action act = () => Despesa.Create(_id, _categoriaId, _data, _descricao, _isLancamentoPago, _valor,
+							  _formaDePagto, anotacao);
+
+			Assert.Throws<ArgumentNullException>(act).ParamName.Should().Be("anotacao"); ;
+
+		}
+
 		[Theory]
 		[InlineData(0)]
 		[InlineData(-1)]
 		public void Nao_pode_criar_despesa_com_categoria_invalida(int categoriaId)
 		{
-			Action act = () => Receita.Create(_id, categoriaId, _data, _descricao, _isLancamentoPago, _valor,
+			Action act = () => Despesa.Create(_id, categoriaId, _data, _descricao, _isLancamentoPago, _valor,
 							  _formaDePagto, _anotacao);
 
 			Assert.Throws<ArgumentOutOfRangeException>(act).ParamName.Should().Be("categoriaId"); ;
