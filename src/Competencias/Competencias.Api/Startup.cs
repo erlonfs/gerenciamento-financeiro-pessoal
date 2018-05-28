@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using Competencias.Api;
 using Competencias.Api.Controllers;
 using Competencias.Domain;
+using Competencias.Domain.Repositories;
 using Competencias.Handlers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -63,6 +64,9 @@ public class Startup
 	{
 		builder.RegisterType<CompetenciaController>().PropertiesAutowired();
 		builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
+
+		builder.RegisterAssemblyTypes(typeof(Repository<>).Assembly)
+			   .Where(t => t.Name.EndsWith("Repository")).AsImplementedInterfaces();
 
 		builder.RegisterAssemblyTypes(typeof(CompetenciaCriadaHandler).Assembly)
 			   .AsClosedTypesOf(typeof(IHandler<>));

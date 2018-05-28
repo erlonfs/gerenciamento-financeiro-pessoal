@@ -2,7 +2,7 @@
 
 namespace SharedKernel.Common
 {
-	public abstract class Entity<TId> : IEquatable<Entity<TId>>
+	public class Entity<TId> : IEquatable<Entity<TId>>
 	{
 		private TId _entityId;
 

@@ -18,13 +18,26 @@ namespace Competencias.Api
 		{
 			try
 			{
-				await _context.SaveChangesAsync();
+				using (var transaction = await _context.Database.BeginTransactionAsync())
+				{
+					try
+					{
+						await _context.SaveChangesAsync();
+
+						transaction.Commit();
+
+					}
+					catch (Exception)
+					{
+						transaction.Rollback();
+						throw;
+					}
+				}
 			}
 			catch (Exception)
 			{
 				throw;
 			}
-			
 		}
 	}
 }
