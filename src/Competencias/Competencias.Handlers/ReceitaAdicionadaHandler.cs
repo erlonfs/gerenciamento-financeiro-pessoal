@@ -3,7 +3,7 @@ using Competencias.Domain.Aggregates;
 using SharedKernel.Common;
 using System.Threading.Tasks;
 
-namespace Competencia.Handlers
+namespace Competencias.Handlers
 {
 	public class ReceitaAdicionadaHandler : IHandler<ReceitaAdicionada>
 	{

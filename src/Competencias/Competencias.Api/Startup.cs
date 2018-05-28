@@ -1,66 +1,56 @@
-﻿using Competencias.Api;
+﻿using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Competencias.Api;
+using Competencias.Api.Controllers;
 using Competencias.Domain;
 using Competencias.Handlers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SharedKernel.Common;
-using SimpleInjector;
-using SimpleInjector.Integration.AspNetCore.Mvc;
-using SimpleInjector.Lifestyles;
 using Swashbuckle.AspNetCore.Swagger;
 
 public class Startup
 {
-	private Container container = new Container();
 	public IConfiguration Configuration { get; }
+	public IContainer Container { get; private set; }
 
-	public Startup(IHostingEnvironment env, IConfiguration configuration)
+	public Startup(IHostingEnvironment env)
 	{
-		Configuration = configuration;
+		var builder = new ConfigurationBuilder()
+			.SetBasePath(env.ContentRootPath)
+			.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+			.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+			.AddEnvironmentVariables();
+		Configuration = builder.Build();
 	}
 
 	public void ConfigureServices(IServiceCollection services)
 	{
-		services.AddMvc();
+		services.AddMvc().AddControllersAsServices();
 
 		services.AddSwaggerGen(c =>
 		{
 			c.SwaggerDoc("v1", new Info { Title = "Competencia API", Version = "v1" });
+			c.DescribeAllEnumsAsStrings();
 		});
 
 		services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AppDatabase")));
 
-		IntegrateSimpleInjector(services);
+		var builder = new ContainerBuilder();
+
+		builder.Populate(services);
+
+		ConfigureContainer(builder);
+
+		Container = builder.Build();
+
 	}
 
-	private void IntegrateSimpleInjector(IServiceCollection services)
-	{
-		container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
-
-		services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-		services.AddSingleton<IControllerActivator>(
-			new SimpleInjectorControllerActivator(container));
-		services.AddSingleton<IViewComponentActivator>(
-			new SimpleInjectorViewComponentActivator(container));
-
-		services.EnableSimpleInjectorCrossWiring(container);
-		services.UseSimpleInjectorAspNetRequestScoping(container);
-	}
-
-	// Configure is called after ConfigureServices is called.
 	public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 	{
-		InitializeContainer(app);
-
-		container.Verify();
-
 		app.UseMvc();
 		app.UseSwagger();
 		app.UseSwaggerUI(c =>
@@ -69,20 +59,14 @@ public class Startup
 		});
 	}
 
-	private void InitializeContainer(IApplicationBuilder app)
+	public void ConfigureContainer(ContainerBuilder builder)
 	{
-		container.RegisterMvcControllers(app);
-		container.RegisterMvcViewComponents(app);
+		builder.RegisterType<CompetenciaController>().PropertiesAutowired();
+		builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
 
-		container.Register<IUnitOfWork, UnitOfWork>(Lifestyle.Scoped);
-
-		var assemblies = new[] { typeof(CompetenciaCriadaHandler).Assembly };
-		container.RegisterCollection(typeof(IHandler<>), assemblies);
-
-		// Allow Simple Injector to resolve services from ASP.NET Core.
-		container.AutoCrossWireAspNetComponents(app);
-
-		DomainEvents.Init(container);
+		builder.RegisterAssemblyTypes(typeof(CompetenciaCriadaHandler).Assembly)
+			   .AsClosedTypesOf(typeof(IHandler<>));
 
 	}
+
 }

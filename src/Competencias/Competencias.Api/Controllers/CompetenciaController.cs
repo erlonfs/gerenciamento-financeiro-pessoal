@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using SharedKernel.Common;
 using SharedKernel.Common.ValueObjects;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Competencias.Api.Controllers
@@ -31,7 +30,7 @@ namespace Competencias.Api.Controllers
 		{
 			var id = Guid.NewGuid();
 
-			var competencia = new Domain.Aggregates.Competencia().Create(id, DateTime.Now, new Ano(dto.Ano), (Mes)dto.Mes);
+			var competencia = new Competencia(id, DateTime.Now, new Ano(dto.Ano), (Mes)dto.Mes);
 
 			_context.Competencia.Add(competencia);
 

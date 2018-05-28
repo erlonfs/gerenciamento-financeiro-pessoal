@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
-using System;
+using SharedKernel.Common;
 
 namespace Competencias.Api.Controllers
 {
@@ -7,9 +7,14 @@ namespace Competencias.Api.Controllers
 	{
 		public override void OnException(ExceptionContext context)
 		{
+			if(context.Exception is ApplicationException)
+			{
+				//TODO
+			}
+
 			if(context.Exception != null)
 			{
-				throw new Exception(context.Exception.Message, context.Exception.InnerException);
+				throw new System.Exception(context.Exception.Message, context.Exception.InnerException);
 			}
 		}
 	}
