@@ -1,5 +1,6 @@
 ﻿using Competencias.Domain;
 using Competencias.Domain.Aggregates;
+using Competencias.Domain.Repositories;
 using SharedKernel.Common;
 using System.Threading.Tasks;
 
@@ -7,20 +8,16 @@ namespace Competencias.Handlers
 {
 	public class CompetenciaCriadaHandler : IHandler<CompetenciaCriada>
 	{
-		private AppDbContext _context;
+		private ICompetenciaRepository _competenciaRepository;
 
-		public CompetenciaCriadaHandler(AppDbContext context)
+		public CompetenciaCriadaHandler(ICompetenciaRepository competenciaRepository)
 		{
-			_context = context;
+			_competenciaRepository = competenciaRepository;
 		}
 
 		public Task HandleAsync(CompetenciaCriada e)
 		{
-
-			//TODO
-
 			return Task.CompletedTask;
-
 		}
 	}
 }

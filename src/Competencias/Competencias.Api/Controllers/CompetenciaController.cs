@@ -1,9 +1,8 @@
 ﻿using Competencias.Api.Dtos;
-using Competencias.Domain;
 using Competencias.Domain.Aggregates;
 using Competencias.Domain.Exceptions;
+using Competencias.Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SharedKernel.Common;
 using SharedKernel.Common.ValueObjects;
 using System;
@@ -16,12 +15,12 @@ namespace Competencias.Api.Controllers
 	public class CompetenciaController : BaseApiController
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		private AppDbContext _context;
+		private readonly ICompetenciaRepository _competenciaRepository;
 
-		public CompetenciaController(IUnitOfWork unitOfWork, AppDbContext context)
+		public CompetenciaController(IUnitOfWork unitOfWork, ICompetenciaRepository competenciaRepository)
 		{
 			_unitOfWork = unitOfWork;
-			_context = context;
+			_competenciaRepository = competenciaRepository;
 		}
 
 		[HttpPost]
@@ -32,9 +31,9 @@ namespace Competencias.Api.Controllers
 
 			var competencia = new Competencia(id, DateTime.Now, new Ano(dto.Ano), (Mes)dto.Mes);
 
-			_context.Competencia.Add(competencia);
+			await _competenciaRepository.AddAsync(competencia);
 
-			await _context.SaveChangesAsync();
+			await _unitOfWork.CommitAsync();
 
 			return competencia.EntityId;
 
@@ -44,7 +43,7 @@ namespace Competencias.Api.Controllers
 		[Route("{id:guid}/adicionar-receita")]
 		public async Task AdicionarReceitaAsync(Guid id, LancamentoDto dto)
 		{
-			var competencia = await _context.Competencia.SingleOrDefaultAsync(x => x.EntityId == id);
+			var competencia = await _competenciaRepository.GetByEntityIdAsync(id);
 			if (competencia == null) throw new CompetenciaNaoEncontradaException();
 
 			var receita = Receita.Create(Guid.NewGuid(), dto.CategoriaId, dto.Data, dto.Descricao,
@@ -52,14 +51,14 @@ namespace Competencias.Api.Controllers
 
 			competencia.AdicionarReceita(receita);
 
-			await _context.SaveChangesAsync();
+			await _unitOfWork.CommitAsync();
 		}
 
 		[HttpPost]
 		[Route("{id:guid}/adicionar-despesa")]
 		public async Task AdicionarDespesaAsync(Guid id, LancamentoDto dto)
 		{
-			var competencia = await _context.Competencia.SingleOrDefaultAsync(x => x.EntityId == id);
+			var competencia = await _competenciaRepository.GetByEntityIdAsync(id);
 			if (competencia == null) throw new CompetenciaNaoEncontradaException();
 
 			var despesa = Despesa.Create(Guid.NewGuid(), dto.CategoriaId, dto.Data, dto.Descricao,
@@ -67,7 +66,7 @@ namespace Competencias.Api.Controllers
 
 			competencia.AdicionarDespesa(despesa);
 
-			await _context.SaveChangesAsync();
+			await _unitOfWork.CommitAsync();
 		}
 
 	}
