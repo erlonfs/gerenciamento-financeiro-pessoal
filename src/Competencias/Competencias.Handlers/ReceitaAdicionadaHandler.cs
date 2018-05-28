@@ -3,7 +3,7 @@ using Competencias.Domain.Aggregates;
 using SharedKernel.Common;
 using System.Threading.Tasks;
 
-namespace Competencia.Handlers
+namespace Competencias.Handlers
 {
 	public class ReceitaAdicionadaHandler : IHandler<ReceitaAdicionada>
 	{
@@ -16,7 +16,8 @@ namespace Competencia.Handlers
 
 		public Task HandleAsync(ReceitaAdicionada e)
 		{
-			//var competencia = await _context.Competencia.SingleAsync(x => x.EntityId == e.AggregateId);
+
+			//TODO
 
 			return Task.CompletedTask;
 

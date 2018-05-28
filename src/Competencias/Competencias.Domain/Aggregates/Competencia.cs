@@ -20,12 +20,12 @@ namespace Competencias.Domain.Aggregates
 		private List<Lancamento> _lancamentos = new List<Lancamento>();
 		public IReadOnlyList<Lancamento> Lancamentos => _lancamentos.AsReadOnly();
 
-		public Competencia()
+		protected Competencia()
 		{
 
 		}
 
-		public Competencia Create(Guid id, DateTime dataCriacao, Ano ano, Mes mes)
+		public Competencia(Guid id, DateTime dataCriacao, Ano ano, Mes mes)
 		{
 			EntityId = id;
 			DataCriacao = dataCriacao;
@@ -33,8 +33,6 @@ namespace Competencias.Domain.Aggregates
 			Mes = mes;
 
 			DomainEvents.Raise(new CompetenciaCriada(EntityId, this));
-
-			return this;
 
 		}
 

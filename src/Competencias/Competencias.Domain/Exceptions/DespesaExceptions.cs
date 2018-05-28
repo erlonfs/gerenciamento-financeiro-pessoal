@@ -1,0 +1,4 @@
+﻿namespace Competencias.Domain.Exceptions
+{
+
+}

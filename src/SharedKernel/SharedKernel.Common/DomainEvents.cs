@@ -1,4 +1,4 @@
-﻿using SimpleInjector;
+﻿using Autofac;
 using System;
 using System.Collections.Generic;
 
@@ -9,12 +9,12 @@ namespace SharedKernel.Common
 		[ThreadStatic]
 		private static List<Delegate> actions;
 
-		public static void Init(Container container)
+		public static void Init(ILifetimeScope scope)
 		{
-			_container = container;
+			_scope = scope;
 		}
 
-		static Container _container { get; set; }
+		static ILifetimeScope _scope { get; set; }
 
 		public static void Register<T>(Action<T> callback) where T : IDomainEvent
 		{
@@ -29,9 +29,9 @@ namespace SharedKernel.Common
 
 		public static void Raise<T>(T args) where T : IDomainEvent
 		{
-			if (_container != null)
+			if (_scope != null)
 			{
-				foreach (var handler in _container.GetAllInstances<IHandler<T>>())
+				foreach (var handler in _scope.ResolveOptional<IEnumerable<IHandler<T>>>())
 				{
 					handler.HandleAsync(args).ConfigureAwait(true);
 				}

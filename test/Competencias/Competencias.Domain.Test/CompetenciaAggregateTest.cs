@@ -9,7 +9,6 @@ namespace Competencias.Domain.Test
 {
 	public class CompetenciaAggregateTest
 	{
-		private readonly Aggregates.Competencia _aggregate;
 		private readonly Guid _competenciaId = Guid.NewGuid();
 		private readonly DateTime _dataCriacao = DateTime.Now;
 		private readonly Mes _mes = Mes.Janeiro;
@@ -23,15 +22,10 @@ namespace Competencias.Domain.Test
 			LancamentoStub.CreateReceitaComValor(2500),
 		};
 
-		public CompetenciaAggregateTest()
-		{
-			_aggregate = new Competencia();
-		}
-
 		[Fact]
 		public void Quando_criar_uma_competencia_deve_contar_dados_informados()
 		{
-			var competencia = _aggregate.Create(_competenciaId, _dataCriacao, _ano, _mes);
+			var competencia = new Competencia(_competenciaId, _dataCriacao, _ano, _mes);
 
 			competencia.EntityId.Should().Be(_competenciaId);
 			competencia.Ano.Should().Be(_ano);
@@ -47,7 +41,7 @@ namespace Competencias.Domain.Test
 		[InlineData(99, 0, -99, -99, 0)]
 		public void Quando_adicionar_lancamentos_deve_constar_saldos_e_totais_corretamente(decimal despesa, decimal receita, decimal saldo, decimal totalContasAPagar, decimal totalContasAReceber)
 		{
-			var competencia = _aggregate.Create(_competenciaId, _dataCriacao, _ano, _mes);
+			var competencia = new Competencia(_competenciaId, _dataCriacao, _ano, _mes);
 
 			competencia.AdicionarDespesa(LancamentoStub.CreateDespesaComValor(despesa));
 			competencia.AdicionarReceita(LancamentoStub.CreateReceitaComValor(receita));
@@ -60,7 +54,7 @@ namespace Competencias.Domain.Test
 		[Fact]
 		public void Quando_ocorrer_lancamentos_diversos_deve_constar_saldos_e_totais_corretamente()
 		{
-			var competencia = _aggregate.Create(_competenciaId, _dataCriacao, _ano, _mes);
+			var competencia = new Competencia(_competenciaId, _dataCriacao, _ano, _mes);
 
 			var receitaAlterar = LancamentoStub.CreateReceitaComValor(55);
 			var despesaAlterar = LancamentoStub.CreateDespesaComValor(85);
