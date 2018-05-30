@@ -4,6 +4,7 @@ using Competencias.Api;
 using Competencias.Api.Controllers;
 using Competencias.Domain;
 using Competencias.Domain.Repositories;
+using Competencias.Domain.Services;
 using Competencias.Handlers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -67,6 +68,9 @@ public class Startup
 
 		builder.RegisterAssemblyTypes(typeof(Repository<>).Assembly)
 			   .Where(t => t.Name.EndsWith("Repository")).AsImplementedInterfaces();
+
+		builder.RegisterAssemblyTypes(typeof(CompetenciaService).Assembly)
+	   .Where(t => t.Name.EndsWith("Service")).AsImplementedInterfaces();
 
 		builder.RegisterAssemblyTypes(typeof(CompetenciaCriadaHandler).Assembly)
 			   .AsClosedTypesOf(typeof(IHandler<>));
