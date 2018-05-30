@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using SharedKernel.Common;
 
 namespace Competencias.Api.Controllers
@@ -7,14 +9,21 @@ namespace Competencias.Api.Controllers
 	{
 		public override void OnException(ExceptionContext context)
 		{
-			if(context.Exception is ApplicationException)
+			if (context.Exception != null)
 			{
-				//TODO
-			}
 
-			if(context.Exception != null)
-			{
-				throw new System.Exception(context.Exception.Message, context.Exception.InnerException);
+				var statusCode = context.Exception is ApplicationException ? 
+								 StatusCodes.Status400BadRequest : 
+								 StatusCodes.Status500InternalServerError;
+
+				var objectResult = new ObjectResult(new
+				{
+					StatusCode = statusCode,
+					Value = context.Exception.Message
+				});
+
+				context.Result = objectResult;
+
 			}
 		}
 	}

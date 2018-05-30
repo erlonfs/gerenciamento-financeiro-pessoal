@@ -2,9 +2,9 @@
 using Competencias.Domain.Aggregates;
 using Competencias.Domain.Exceptions;
 using Competencias.Domain.Repositories;
+using Competencias.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using SharedKernel.Common;
-using SharedKernel.Common.ValueObjects;
 using System;
 using System.Threading.Tasks;
 
@@ -15,12 +15,13 @@ namespace Competencias.Api.Controllers
 	public class CompetenciaController : BaseApiController
 	{
 		private readonly IUnitOfWork _unitOfWork;
-		private readonly ICompetenciaRepository _competenciaRepository;
+		private readonly ICompetenciaService _competenciaService;
 
-		public CompetenciaController(IUnitOfWork unitOfWork, ICompetenciaRepository competenciaRepository)
+		public CompetenciaController(IUnitOfWork unitOfWork,
+									 ICompetenciaService competenciaService)
 		{
 			_unitOfWork = unitOfWork;
-			_competenciaRepository = competenciaRepository;
+			_competenciaService = competenciaService;
 		}
 
 		[HttpPost]
@@ -29,9 +30,7 @@ namespace Competencias.Api.Controllers
 		{
 			var id = Guid.NewGuid();
 
-			var competencia = new Competencia(id, DateTime.Now, new Ano(dto.Ano), (Mes)dto.Mes);
-
-			await _competenciaRepository.AddAsync(competencia);
+			var competencia = await _competenciaService.CriarAsync(id, dto.Ano, dto.Mes);
 
 			await _unitOfWork.CommitAsync();
 
@@ -41,32 +40,30 @@ namespace Competencias.Api.Controllers
 
 		[HttpPost]
 		[Route("{id:guid}/adicionar-receita")]
-		public async Task AdicionarReceitaAsync(Guid id, LancamentoDto dto)
+		public async Task<Guid> AdicionarReceitaAsync(Guid id, LancamentoDto dto)
 		{
-			var competencia = await _competenciaRepository.GetByEntityIdAsync(id);
-			if (competencia == null) throw new CompetenciaNaoEncontradaException();
+			var receitaId = Guid.NewGuid();
 
-			var receita = Receita.Create(Guid.NewGuid(), dto.CategoriaId, dto.Data, dto.Descricao,
+			var receita = await _competenciaService.AdicionarReceitaAsync(id, receitaId, dto.CategoriaId, dto.Data, dto.Descricao,
 										dto.IsLancamentoPago, dto.Valor, dto.FormaDePagto, dto.Anotacao);
 
-			competencia.AdicionarReceita(receita);
-
 			await _unitOfWork.CommitAsync();
+
+			return receitaId;
 		}
 
 		[HttpPost]
 		[Route("{id:guid}/adicionar-despesa")]
-		public async Task AdicionarDespesaAsync(Guid id, LancamentoDto dto)
+		public async Task<Guid> AdicionarDespesaAsync(Guid id, LancamentoDto dto)
 		{
-			var competencia = await _competenciaRepository.GetByEntityIdAsync(id);
-			if (competencia == null) throw new CompetenciaNaoEncontradaException();
+			var despesaId = Guid.NewGuid();
 
-			var despesa = Despesa.Create(Guid.NewGuid(), dto.CategoriaId, dto.Data, dto.Descricao,
+			var despesa = await _competenciaService.AdicionarDespesaAsync(id, despesaId, dto.CategoriaId, dto.Data, dto.Descricao,
 										dto.IsLancamentoPago, dto.Valor, dto.FormaDePagto, dto.Anotacao);
 
-			competencia.AdicionarDespesa(despesa);
-
 			await _unitOfWork.CommitAsync();
+
+			return despesaId;
 		}
 
 	}
