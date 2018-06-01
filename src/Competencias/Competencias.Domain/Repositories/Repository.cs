@@ -24,10 +24,10 @@ namespace Competencias.Domain.Repositories
 
 		public async Task<TEntity> GetByEntityIdAsync(Guid entityId)
 		{
-			var result = await _dbSet.SingleOrDefaultAsync(x => x.EntityId == entityId);
+			var result = _dbSet.Local.SingleOrDefault(x => x.EntityId == entityId);
 			if(result == null)
 			{
-				result = _dbSet.Local.SingleOrDefault(x => x.EntityId == entityId);
+				result = await _dbSet.SingleOrDefaultAsync(x => x.EntityId == entityId);
 			}
 
 			return result;

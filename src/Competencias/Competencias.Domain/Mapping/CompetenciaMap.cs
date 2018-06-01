@@ -16,17 +16,14 @@ namespace Competencias.Domain.Mapping
 			builder.Property(x => x.DataCriacao);
 			builder.Property(x => x.Mes);
 			builder.OwnsOne(x => x.Ano).Property(c => c.Numero).HasColumnName("Ano");
+			builder.Ignore(x => x.Ano);
 
 			builder.Property(x => x.Saldo);
 			builder.Property(x => x.TotalContasAPagar);
 			builder.Property(x => x.TotalContasAReceber);
 
-			builder.HasMany(x => x.Lancamentos);
+			builder.HasMany(x => x.Lancamentos).WithOne(x => x.Competencia);
 
-		}
-
-		private class Ano
-		{
 		}
 	}
 }

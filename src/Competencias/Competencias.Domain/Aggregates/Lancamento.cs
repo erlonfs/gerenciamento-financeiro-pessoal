@@ -5,6 +5,7 @@ namespace Competencias.Domain.Aggregates
 {
 	public abstract class Lancamento : Entity<Guid>
 	{
+		protected Lancamento() { }
 		protected Lancamento(Guid id) : base(id) { }
 
 		public int Id { get; protected set; }
@@ -19,5 +20,7 @@ namespace Competencias.Domain.Aggregates
 		public decimal Valor { get; protected set; }
 		public int FormaDePagtoId { get; protected set; }
 		public string Anotacao { get; protected set; }
+
+		public virtual Competencia Competencia { get; set; }
 	}
 }

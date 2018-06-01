@@ -34,6 +34,8 @@ namespace Competencias.Domain.Services
 			var competencia = await _competenciaRepository.GetByEntityIdAsync(competenciaId);
 			if (competencia == null) throw new CompetenciaNaoEncontradaException();
 
+			competencia = await _competenciaRepository.ObterPorAnoEMesAsync(competencia.Ano.Numero, (int)competencia.Mes);
+
 			var receita = Receita.Create(Guid.NewGuid(), categoriaId, data, descricao, isLancamentoPago, valor, 
 										formaDePagto, anotacao);
 
