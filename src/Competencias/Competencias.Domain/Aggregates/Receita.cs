@@ -2,8 +2,9 @@
 
 namespace Competencias.Domain.Aggregates
 {
-	public sealed class Receita : Lancamento
+	public class Receita : Lancamento
 	{
+		private Receita() { }
 		private Receita(Guid id) : base(id) { }
 
 		public static Receita Create(Guid id, int categoriaId, DateTime data, string descricao,

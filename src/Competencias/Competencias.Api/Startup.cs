@@ -39,7 +39,11 @@ public class Startup
 			c.DescribeAllEnumsAsStrings();
 		});
 
-		services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AppDatabase")));
+		services.AddDbContext<AppDbContext>(options =>
+		{
+			options.UseSqlServer(Configuration.GetConnectionString("AppDatabase"));
+			options.UseLazyLoadingProxies();
+		});
 
 		var builder = new ContainerBuilder();
 

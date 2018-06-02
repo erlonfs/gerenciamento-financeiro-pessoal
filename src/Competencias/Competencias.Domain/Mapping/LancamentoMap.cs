@@ -25,7 +25,10 @@ namespace Competencias.Domain.Mapping
 			builder.Property(x => x.FormaDePagtoId);
 			builder.Property(x => x.Anotacao);
 
-			builder.HasDiscriminator(x => x.Tipo);
+			builder.HasDiscriminator(x => x.Tipo)
+					.HasValue<Receita>("Receita")
+					.HasValue<Despesa>("Despesa");
+
 
 
 		}

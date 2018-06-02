@@ -16,7 +16,7 @@ namespace Competencias.Domain.Repositories
 
 		public async Task<Competencia> ObterPorAnoEMesAsync(int ano, int mes)
 		{
-			return await _context.Competencia.SingleOrDefaultAsync(x => x.Ano.Numero == ano && (int)x.Mes == mes);
+			return await _context.Competencia.Include(x => x.Lancamentos).SingleOrDefaultAsync(x => x.Ano.Numero == ano && (int)x.Mes == mes);
 		}
 	}
 }
