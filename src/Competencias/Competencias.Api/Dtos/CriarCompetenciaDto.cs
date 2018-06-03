@@ -2,7 +2,7 @@
 
 namespace Competencias.Api.Dtos
 {
-	public class CompetenciaDto
+	public class CriarCompetenciaDto
     {
 		public int Ano { get; set; }
 		public Mes Mes { get; set; }

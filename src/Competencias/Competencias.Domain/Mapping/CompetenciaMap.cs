@@ -1,7 +1,6 @@
 ﻿using Competencias.Domain.Aggregates;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SharedKernel.Common.ValueObjects;
 
 namespace Competencias.Domain.Mapping
 {

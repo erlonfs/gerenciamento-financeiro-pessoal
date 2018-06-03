@@ -3,7 +3,7 @@ using System;
 
 namespace Competencias.Api.Dtos
 {
-	public class LancamentoDto
+	public class CriarLancamentoDto
 	{
 		public int CategoriaId { get; set; }
 		public DateTime Data { get; set; }
