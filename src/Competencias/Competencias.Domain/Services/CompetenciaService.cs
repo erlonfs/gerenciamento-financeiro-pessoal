@@ -16,12 +16,12 @@ namespace Competencias.Domain.Services
 			_competenciaRepository = competenciaRepository;
 		}
 
-		public async Task<Competencia> CriarAsync(Guid id, int ano, int mes)
+		public async Task<Competencia> CriarAsync(Guid id, int ano, Mes mes)
 		{
-			var competenciaPorAnoeMes = await _competenciaRepository.ObterPorAnoEMesAsync(ano, mes);
-			if (competenciaPorAnoeMes != null) throw new CompetenciaJaExistenteParaAnoEMesException(mes, ano);
+			var competenciaPorAnoeMes = await _competenciaRepository.ObterPorAnoEMesAsync(ano, (int)mes);
+			if (competenciaPorAnoeMes != null) throw new CompetenciaJaExistenteParaAnoEMesException(mes.ToString(), ano.ToString("0000"));
 
-			var competencia = new Competencia(id, DateTime.Now, new Ano(ano), (Mes)mes);
+			var competencia = new Competencia(id, DateTime.Now, new Ano(ano), mes);
 
 			await _competenciaRepository.AddAsync(competencia);
 

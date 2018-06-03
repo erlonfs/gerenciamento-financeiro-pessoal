@@ -1,4 +1,5 @@
-﻿using SharedKernel.Common;
+﻿using Competencias.Domain.Exceptions;
+using SharedKernel.Common;
 using SharedKernel.Common.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -43,7 +44,7 @@ namespace Competencias.Domain.Aggregates
 		public void AdicionarReceita(Receita receita)
 		{
 			var existeReceita = Lancamentos.OfType<Receita>().Any(x => x.EntityId == receita.EntityId);
-			if (existeReceita) throw new Exception("Receita já adicionada!");
+			if (existeReceita) throw new ReceitaJaAdicionadaException();
 
 			TotalContasAReceber += receita;
 			Saldo += receita;
@@ -56,7 +57,7 @@ namespace Competencias.Domain.Aggregates
 		public void AdicionarDespesa(Despesa despesa)
 		{
 			var existeDespesa = Lancamentos.OfType<Despesa>().Any(x => x.EntityId == despesa.EntityId);
-			if (existeDespesa) throw new Exception("Despesa já adicionada!");
+			if (existeDespesa) throw new DespesaJaAdicionadaException();
 
 			TotalContasAPagar += despesa;
 			Saldo += despesa;

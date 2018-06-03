@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SharedKernel.Common.ValueObjects;
-using System;
 
 namespace Competencias.Domain.Mapping
 {
@@ -18,7 +17,7 @@ namespace Competencias.Domain.Mapping
 			builder.Property(x => x.DataCriacao);
 			builder.Property(x => x.MesInt).HasColumnName("Mes");
 
-			builder.OwnsOne<Ano>(x => x.Ano, cb =>
+			builder.OwnsOne(x => x.Ano, cb =>
 			{
 				cb.Property(c => c.Numero).HasColumnName("Ano");
 			});

@@ -9,6 +9,6 @@ namespace Competencias.Domain.Exceptions
 
 	public class CompetenciaJaExistenteParaAnoEMesException : ApplicationException
 	{
-		public CompetenciaJaExistenteParaAnoEMesException(int mes, int ano) : base($"Já existe competência para {mes}/{ano}.") { }
+		public CompetenciaJaExistenteParaAnoEMesException(string mes, string ano) : base($"Já existe competência para {mes}/{ano}.") { }
 	}
 }

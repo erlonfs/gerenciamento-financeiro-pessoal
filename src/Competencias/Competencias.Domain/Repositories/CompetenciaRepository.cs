@@ -1,6 +1,5 @@
 ﻿using Competencias.Domain.Aggregates;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Competencias.Domain.Repositories
