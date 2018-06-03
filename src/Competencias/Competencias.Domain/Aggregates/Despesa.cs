@@ -4,7 +4,7 @@ namespace Competencias.Domain.Aggregates
 {
 	public class Despesa : Lancamento
 	{
-		private Despesa() { }
+		protected Despesa() { }
 		private Despesa(Guid id) : base(id) { }
 
 		public static Despesa Create(Guid id, int categoriaId, DateTime data, string descricao, bool isLancamentoPago, decimal valor, FormaDePagamento formaDePagto, string anotacao)

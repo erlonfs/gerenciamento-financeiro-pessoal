@@ -2,6 +2,7 @@
 using SharedKernel.Common.ValueObjects;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Competencias.Domain.Aggregates
@@ -9,16 +10,19 @@ namespace Competencias.Domain.Aggregates
 	public class Competencia : Entity<Guid>
 	{
 		public int Id { get; private set; }
-		public Ano Ano { get; private set; }
-		public Mes Mes { get; private set; }
 		public DateTime DataCriacao { get; private set; }
+
+		[NotMapped]
+		public Mes Mes { get; private set; }
+		public int MesInt { get { return (int)Mes; } private set { Mes = (Mes)value; } }
+
+		public virtual Ano Ano { get; private set; }
 
 		public Decimal TotalContasAPagar { get; private set; }
 		public Decimal TotalContasAReceber { get; private set; }
 		public Decimal Saldo { get; private set; }
 
-		public virtual HashSet<Lancamento> Lancamentos { get; set; } = new HashSet<Lancamento>();
-		//public IReadOnlyList<Lancamento> Lancamentos => _lancamentos.ToList().AsReadOnly();
+		public virtual HashSet<Lancamento> Lancamentos { get; private set; } = new HashSet<Lancamento>();
 
 		protected Competencia()
 		{
