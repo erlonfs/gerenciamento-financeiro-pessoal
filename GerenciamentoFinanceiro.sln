@@ -31,7 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Relatorios", "Relatorios", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{C9D36A01-6416-4693-9BA7-036479BDC1B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Competencias.Data", "Competencias.Data\Competencias.Data.csproj", "{3EF43855-D122-4D76-BADF-92852318408F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Competencias.Data", "src\Competencias\Competencias.Data\Competencias.Data.csproj", "{3EF43855-D122-4D76-BADF-92852318408F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Competencias.Data.Dapper", "src\Competencias\Competencias.Data.Dapper\Competencias.Data.Dapper.csproj", "{F8D52700-345F-43E3-85E7-9A9A52698534}"
 EndProject
