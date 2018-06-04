@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\SharedKernel\SharedKernel.Common\SharedKernel.Common.csproj" />
+    <ProjectReference Include="..\Competencias.Data.Dapper\Competencias.Data.Dapper.csproj" />
     <ProjectReference Include="..\Competencias.Data\Competencias.Data.csproj" />
     <ProjectReference Include="..\Competencias.Domain\Competencias.Domain.csproj" />
     <ProjectReference Include="..\Competencias.Handlers\Competencias.Handlers.csproj" />
