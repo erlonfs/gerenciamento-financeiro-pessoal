@@ -1,5 +1,4 @@
-﻿using Competencias.Domain;
-using Competencias.Domain.Aggregates;
+﻿using Competencias.Domain.Aggregates;
 using Competencias.Domain.Repositories;
 using SharedKernel.Common;
 using System.Threading.Tasks;

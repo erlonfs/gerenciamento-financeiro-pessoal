@@ -14,9 +14,12 @@ namespace Competencias.Domain.Mapping
 			builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
 			builder.Property(x => x.DataCriacao);
-			builder.Property(x => x.Mes);
-			builder.OwnsOne(x => x.Ano).Property(c => c.Numero).HasColumnName("Ano");
-			builder.Ignore(x => x.Ano);
+			builder.Property(x => x.MesInt).HasColumnName("Mes");
+
+			builder.OwnsOne(x => x.Ano, cb =>
+			{
+				cb.Property(c => c.Numero).HasColumnName("Ano");
+			});
 
 			builder.Property(x => x.Saldo);
 			builder.Property(x => x.TotalContasAPagar);
