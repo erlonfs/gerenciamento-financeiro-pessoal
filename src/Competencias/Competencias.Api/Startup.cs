@@ -2,6 +2,8 @@
 using Autofac.Extensions.DependencyInjection;
 using Competencias.Api;
 using Competencias.Api.Controllers;
+using Competencias.Data.Dapper;
+using Competencias.Data.Dapper.Finders;
 using Competencias.Domain;
 using Competencias.Domain.Repositories;
 using Competencias.Domain.Services;
@@ -78,6 +80,13 @@ public class Startup
 
 		builder.RegisterAssemblyTypes(typeof(CompetenciaCriadaHandler).Assembly)
 			   .AsClosedTypesOf(typeof(IHandler<>));
+
+		builder.RegisterType<AppConnectionString>()
+			.AsSelf()
+			.WithParameter(new TypedParameter(typeof(string), Configuration.GetConnectionString("AppDatabase")));
+
+		builder.RegisterAssemblyTypes(typeof(CompetenciaFinder).Assembly)
+			.Where(t => t.Name.EndsWith("Finder")).AsImplementedInterfaces();
 
 	}
 

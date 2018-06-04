@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Competencias.Data.Dtos;
 using Competencias.Data.Finders;
@@ -9,14 +10,21 @@ namespace Competencias.Data.Dapper.Finders
 {
 	public class CompetenciaFinder : ICompetenciaFinder
 	{
-		public CompetenciaFinder()
-		{
+		private readonly AppConnectionString _appConnectionString;
 
+		public CompetenciaFinder(AppConnectionString appConnectionString)
+		{
+			_appConnectionString = appConnectionString;
 		}
 
-		public Task<IEnumerable<CompetenciaDto>> ObterAsync()
+		public async Task<IEnumerable<CompetenciaDto>> ObterAsync()
 		{
-			throw new NotImplementedException();
+			string sql = @"SELECT c.EntityId, c.DataCriacao, c.Mes, c.Ano FROM COMP.Competencia AS c";
+
+			using(var connection = new SqlConnection(_appConnectionString))
+			{
+				return await connection.QueryAsync<CompetenciaDto>(sql);
+			}
 		}
 
 		public Task<IEnumerable<LancamentoDto>> ObterLancamentosPorCompetenciaIdAsync(Guid competenciaId)
